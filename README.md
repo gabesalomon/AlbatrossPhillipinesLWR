@@ -15,8 +15,12 @@ Methods
 
 ----
 
-Individual specimens were taken out of solution, with the mouth and gill cavities drained before being dried using Kimtech wipes. Individuals who had their abdominal cavities cut were drained and gently squeezed to remove excess ethanol. The standard and total lengths (mm) were measured using mechanical calipers. The mass (g) was measured using an analytical balance. Individuals were then returned to their respective lot jars and topped off with 75% EtOH if necessary. This process was kept consistently within 1-3 minutes, during which time ethanol also evaporated. For individuals with tags, the original string was cut in placed back in the lot jar, while the tag was retied using clear fishing wire after measurement wre taken.
+Individual specimens were taken out of solution, with the mouth and gill cavities drained before being dried using Kimtech wipes. Individuals who had their abdominal cavities cut were drained and gently squeezed to remove excess ethanol. The standard and total lengths (mm) were measured using mechanical calipers. The mass (g) was measured using an analytical balance. Individuals were then returned to their respective lot jars and topped off with 75% EtOH if necessary. This process was kept consistently within 1-3 minutes, during which time ethanol also evaporated. For individuals with tags, the original string was cut in placed back in the lot jar, while the tag was retied using clear fishing wire after measurements were taken.
 
 <br>
 
 Species were selected based on the availability of reported fresh-caught length-weight relationship (LWR) from within the Phillipine archipelago.
+
+<Br>
+  
+  
