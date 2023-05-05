@@ -3,7 +3,7 @@
 
 <br>
 
-Purpose 
+### Purpose 
 
 ----
 
@@ -11,7 +11,7 @@ To examine the effect ethanol preservation shrinkage has on reported length-weig
 
 <br>
 
-Methods
+### Methods
 
 ----
 
@@ -24,6 +24,9 @@ The portion of the _Albatross_ Phillipine exedition collection sampled from was 
 <Br>
  
  Length-weight Relationship W=aL^b
+ 
  Fulton's Condition Factor  K=100(W/SL^3) - for comparison to an ideal weight
+ 
  Le Cren's Relative Condition Factor K_n = W/aL^n - for comparison to the average weight
+ 
  Goal of project in R is to produce graphs of these three formulas and to compare the resulting _a_ and _b_ values to those from fresh studies found in the rfishbase database using log10a and b.
