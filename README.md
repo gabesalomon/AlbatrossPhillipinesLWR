@@ -19,7 +19,7 @@ Individual specimens were taken out of solution, with the mouth and gill cavitie
 
 <br>
 
-Species were selected based on the availability of reported fresh-caught length-weight relationship (LWR) from within the Phillipine archipelago.
+The portion of the _Albatross_ Phillipine exedition collection sampled from was that which was available to me in the Carpenter Molecular Systematics lab (ODU) as of March 2023. The selection of species in the lab were what was being tageted by the Phillipines PIRE project. Species were selected based on the availability of reported fresh-caught length-weight relationship (LWR) from within the Phillipine archipelago.
 
 <Br>
   
