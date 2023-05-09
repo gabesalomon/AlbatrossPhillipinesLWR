@@ -7,7 +7,7 @@ library(ggplot2)
 library(nls2)
 
 # P. bindus Dataset ----
-Photopectoralis_bindus <- read_excel("C:/Users/gabes/Desktop/Albatross_Raw_Data/Photopectoralis_bindus.xlsx")
+Photopectoralis_bindus <- read_excel("AlbatrossPhillipinesLWR/Albatross_Raw_Data/Photopectoralis_bindus.xlsx")
 View(Photopectoralis_bindus)
 summary(Photopectoralis_bindus)
 y <- c(Photopectoralis_bindus$Mass_g)

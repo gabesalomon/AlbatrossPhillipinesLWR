@@ -7,7 +7,7 @@ library(ggplot2)
 library(nls2)
 
 # S. fuscescens Dataset ----
-Siganus_fuscescens <- read_excel("C:/Users/gabes/Desktop/Albatross_Raw_Data/Siganus_fuscescens.xlsx")
+Siganus_fuscescens <- read_excel("AlbatrossPhillipinesLWR/Albatross_Raw_Data/Siganus_fuscescens.xlsx")
 View(Siganus_fuscescens)
 summary(Siganus_fuscescens)
 y <- c(Siganus_fuscescens$Mass_g)

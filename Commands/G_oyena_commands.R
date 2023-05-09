@@ -7,7 +7,7 @@ library(ggplot2)
 library(nls2)
 
 # G. oyena Dataset ----
-Gerres_oyena <- read_excel("C:/Users/gabes/Desktop/Albatross_Raw_Data/Gerres_oyena.xlsx")
+Gerres_oyena <- read_excel("AlbatrossPhillipinesLWR/Albatross_Raw_Data/Gerres_oyena.xlsx")
 View(Gerres_oyena)
 summary(Gerres_oyena)
 y <- c(Gerres_oyena$Mass_g)

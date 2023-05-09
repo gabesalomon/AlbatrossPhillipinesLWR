@@ -7,7 +7,7 @@ library(ggplot2)
 library(nls2)
 
 # S. obtusata Dataset ----
-Sphyraena_obtusata <- read_excel("C:/Users/gabes/Desktop/Albatross_Raw_Data/Sphyraena_obtusata.xlsx")
+Sphyraena_obtusata <- read_excel("AlbatrossPhillipinesLWR/Albatross_Raw_Data/Sphyraena_obtusata.xlsx")
 View(Sphyraena_obtusata)
 summary(Sphyraena_obtusata)
 y <- c(Sphyraena_obtusata$Mass_g)

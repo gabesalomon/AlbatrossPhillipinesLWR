@@ -7,7 +7,7 @@ library(ggplot2)
 library(nls2)
 
 # S. delicatulus Dataset ----
-Spratelloides_delicatulus <- read_excel("C:/Users/gabes/Desktop/Albatross_Raw_Data/Spratelloides_delicatulus.xlsx")
+Spratelloides_delicatulus <- read_excel("AlbatrossPhillipinesLWR/Albatross_Raw_Data/Spratelloides_delicatulus.xlsx")
 View(Spratelloides_delicatulus)
 summary(Spratelloides_delicatulus)
 y <- c(Spratelloides_delicatulus$Mass_g)

@@ -7,7 +7,7 @@ library(ggplot2)
 library(nls2)
 
 # K. marginata Dataset ----
-Kuhlia_marginata <- read_excel("C:/Users/gabes/Desktop/Albatross_Raw_Data/Kuhlia_marginata.xlsx")
+Kuhlia_marginata <- read_excel("AlbatrossPhillipinesLWR/Albatross_Raw_Data/Kuhlia_marginata.xlsx")
 View(Kuhlia_marginata)
 summary(Kuhlia_marginata)
 y <- c(Kuhlia_marginata$Mass_g)

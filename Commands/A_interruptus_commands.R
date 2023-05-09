@@ -7,7 +7,7 @@ library(ggplot2)
 library(nls2)
 
 # A. interruptus Dataset ----
-Ambassis_interruptus <- read_excel("C:/Users/gabes/Desktop/Albatross_Raw_Data/Ambassis_interruptus.xlsx")
+Ambassis_interruptus <- read_excel("AlbatrossPhillipinesLWR/Albatross_Raw_Data/Ambassis_interruptus.xlsx")
 View(Ambassis_interruptus)
 summary(Ambassis_interruptus)
 y <- c(Ambassis_interruptus$Mass_g)

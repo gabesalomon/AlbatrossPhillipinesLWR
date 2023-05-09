@@ -7,7 +7,7 @@ library(ggplot2)
 library(nls2)
 
 # G. giuris Dataset ----
-Glossogobius_giuris <- read_excel("C:/Users/gabes/Desktop/Albatross_Raw_Data/Glossogobius_giuris.xlsx")
+Glossogobius_giuris <- read_excel("AlbatrossPhillipinesLWR/Albatross_Raw_Data/Glossogobius_giuris.xlsx")
 View(Glossogobius_giuris)
 summary(Glossogobius_giuris)
 y <- c(Glossogobius_giuris$Mass_g)
