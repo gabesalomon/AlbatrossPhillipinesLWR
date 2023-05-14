@@ -24,8 +24,8 @@ nls1 <- nls(y ~ afit*xS^bfit, data.frame(xS , y), start = list(afit=1, bfit=1))
 print(nls1)
 yfit <- coef(nls1)[1]*xS^coef(nls1)[2]
 lines(xS, yfit, col=2)
-a <- 0.031066
-b <- 2.922080
+a <- 0.010986
+b <- 2.927074
 summary(nls1)
 summary(nls1)$coeffdetermination
 
