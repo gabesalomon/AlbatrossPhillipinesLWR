@@ -5,6 +5,7 @@ library(rfishbase)
 library(readxl)
 library(ggplot2)
 library(nls2)
+library(patchwork)
 
 # K. marginata Dataset ----
 Kuhlia_marginata <- read_excel("AlbatrossPhillipinesLWR/Albatross_Raw_Data/Kuhlia_marginata.xlsx")

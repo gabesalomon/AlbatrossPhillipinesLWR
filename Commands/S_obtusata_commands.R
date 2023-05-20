@@ -5,6 +5,7 @@ library(rfishbase)
 library(readxl)
 library(ggplot2)
 library(nls2)
+library(patchwork)
 
 # S. obtusata Dataset ----
 Sphyraena_obtusata <- read_excel("AlbatrossPhillipinesLWR/Albatross_Raw_Data/Sphyraena_obtusata.xlsx")

@@ -5,6 +5,7 @@ library(rfishbase)
 library(readxl)
 library(ggplot2)
 library(nls2)
+library(patchwork)
 
 # P. bindus Dataset ----
 Photopectoralis_bindus <- read_excel("AlbatrossPhillipinesLWR/Albatross_Raw_Data/Photopectoralis_bindus.xlsx")

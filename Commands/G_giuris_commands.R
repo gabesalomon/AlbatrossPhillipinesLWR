@@ -5,6 +5,7 @@ library(rfishbase)
 library(readxl)
 library(ggplot2)
 library(nls2)
+library(patchwork)
 
 # G. giuris Dataset ----
 Glossogobius_giuris <- read_excel("AlbatrossPhillipinesLWR/Albatross_Raw_Data/Glossogobius_giuris.xlsx")

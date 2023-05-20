@@ -5,6 +5,7 @@ library(rfishbase)
 library(readxl)
 library(ggplot2)
 library(nls2)
+library(patchwork)
 
 # A. interrupta Dataset ----
 Ambassis_interrupta <- read_excel("AlbatrossPhillipinesLWR/Albatross_Raw_Data/Ambassis_interrupta.xlsx")
