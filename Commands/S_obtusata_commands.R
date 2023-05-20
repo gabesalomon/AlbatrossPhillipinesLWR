@@ -43,7 +43,31 @@ length_weight("Sphyraena obtusata")
 fb_a <- c(length_weight("Sphyraena obtusata"))
 compar1 <- data.frame(var0 = c(a,b), var1 = c(fb_a$a,fb_a$b))
 
+log_a <- log10(fb_a$a)
+data.frame(fb_a$b, log_a)
+comp2 <- data.frame(fb_a$b, log_a)
+
+coll_log_a <- log10(a)
+collected1 <- data.frame(b, coll_log_a)
+
+ggplot()+
+  geom_point(comp2, mapping=aes(x=fb_a.b, y=log_a))+
+  geom_point(collected1, mapping=aes(x=b, y=coll_log_a), color="red")+
+  geom_smooth(method = lm, se = FALSE, color="blue")+
+  theme(axis.text.x = element_text(hjust = 0.5))+
+  ggtitle("Length-Weight log10a vs b of S. obtusata")+
+  xlab("b")+
+  ylab("log10a")
+  
+  
+# Annotated Graph ---- 
 ggplot(Sphyraena_obtusata, aes(x=SL_cm, y=Mass_g))+
-  
-  
-  # INCOMPLETE ---- 
+  geom_point(aes(fill=))+
+  geom_smooth(method = glm, formula = y ~ I(0.0024577*(x^(3.3447781))), se = TRUE)+
+  geom_segment(aes(x = 26, xend = 13, y = 8, yend = 8), color = "red")+
+  annotate("text" , label="y ~ 0.0024577x^(3.3447781)  R2 ~ ", x=10, y=5)+
+  theme(axis.text.x = element_text(hjust = 0.5))+
+  ggtitle("LWR of S. obtusata")+
+  xlab("SL_cm")+
+  ylab("Mass_g")
+

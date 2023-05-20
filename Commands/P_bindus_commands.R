@@ -43,7 +43,30 @@ length_weight("Photopectoralis bindus")
 fb_a <- c(length_weight("Photopectoralis bindus"))
 compar1 <- data.frame(var0 = c(a,b), var1 = c(fb_a$a,fb_a$b))
 
+log_a <- log10(fb_a$a)
+data.frame(fb_a$b, log_a)
+comp2 <- data.frame(fb_a$b, log_a)
+
+coll_log_a <- log10(a)
+collected1 <- data.frame(b, coll_log_a)
+
+ggplot()+
+  geom_point(comp2, mapping=aes(x=fb_a.b, y=log_a))+
+  geom_point(collected1, mapping=aes(x=b, y=coll_log_a), color="red")+
+  geom_smooth(method = lm, se = TRUE, color="blue")+
+  theme(axis.text.x = element_text(hjust = 0.5))+
+  ggtitle("Length-Weight log10a vs b of P. bindus")+
+  xlab("b")+
+  ylab("log10a")
+  
+  
+  # Annotated Graph ---- 
 ggplot(Photopectoralis_bindus, aes(x=SL_cm, y=Mass_g))+
-  
-  
-  # INCOMPLETE ---- 
+  geom_point(aes(fill=))+
+  geom_smooth(method = glm, formula = y ~ I(0.023412*(x^(3.27441))), se = TRUE)+
+  geom_segment(aes(x = 9.4, xend = 2.4, y = 8, yend = 8), color = "red")+
+  annotate("text" , label="y ~ 0.023412x^(3.27441)  R2 ~ ", x=8, y=4)+
+  theme(axis.text.x = element_text(hjust = 0.5))+
+  ggtitle("LWR of P. bindus")+
+  xlab("SL_cm")+
+  ylab("Mass_g")
