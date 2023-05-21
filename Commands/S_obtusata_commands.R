@@ -6,6 +6,7 @@ library(readxl)
 library(ggplot2)
 library(nls2)
 library(patchwork)
+library(dplyr)
 
 # S. obtusata Dataset ----
 Sphyraena_obtusata <- read_excel("AlbatrossPhillipinesLWR/Albatross_Raw_Data/Sphyraena_obtusata.xlsx")
@@ -45,21 +46,24 @@ fb_a <- c(length_weight("Sphyraena obtusata"))
 compar1 <- data.frame(var0 = c(a,b), var1 = c(fb_a$a,fb_a$b))
 
 log_a <- log10(fb_a$a)
-data.frame(fb_a$b, log_a)
-comp2 <- data.frame(fb_a$b, log_a)
+color <- c("black","green","black","black","black","black","black","black","black","green")
+data.frame(fb_a$b, log_a, color)
+comp2 <- data.frame(fb_a$b, log_a, color)
 
 coll_log_a <- log10(a)
 collected1 <- data.frame(b, coll_log_a)
 
 ggplot()+
-  geom_point(comp2, mapping=aes(x=fb_a.b, y=log_a))+
+  geom_point(comp2, mapping=aes(x=fb_a.b, y=log_a), color=color)+
   geom_point(collected1, mapping=aes(x=b, y=coll_log_a), color="red")+
-  geom_smooth(method = lm, se = FALSE, color="blue")+
+  geom_smooth(comp2, method = lm, mapping=aes(x=fb_a.b, y=log_a), se = FALSE, color="blue")+
   theme(axis.text.x = element_text(hjust = 0.5))+
   ggtitle("Length-Weight log10a vs b of S. obtusata")+
   xlab("b")+
   ylab("log10a")
-  
+
+fb_s_obtusata <- length_weight("Sphyraena obtusata") 
+filtered_data <- fb_s_obtusata %>% filter(fb_s_obtusata$EsQ != "yes") 
   
 # Annotated Graph ---- 
 ggplot(Sphyraena_obtusata, aes(x=SL_cm, y=Mass_g))+

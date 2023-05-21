@@ -45,16 +45,17 @@ fb_a <- c(length_weight("Gerres oyena"))
 compar1 <- data.frame(var0 = c(a,b), var1 = c(fb_a$a,fb_a$b))
 
 log_a <- log10(fb_a$a)
-data.frame(fb_a$b, log_a)
-comp2 <- data.frame(fb_a$b, log_a)
+color <- c("black","black","green","green")
+data.frame(fb_a$b, log_a, color)
+comp2 <- data.frame(fb_a$b, log_a, color)
 
 coll_log_a <- log10(a)
 collected1 <- data.frame(b, coll_log_a)
 
 ggplot()+
-  geom_point(comp2, mapping=aes(x=fb_a.b, y=log_a))+
+  geom_point(comp2, mapping=aes(x=fb_a.b, y=log_a), color=color)+
   geom_point(collected1, mapping=aes(x=b, y=coll_log_a), color="red")+
-  geom_smooth(method = lm, se = TRUE, color="blue")+
+  geom_smooth(comp2, method = lm, mapping=aes(x=fb_a.b, y=log_a), se = FALSE, color="blue")+
   theme(axis.text.x = element_text(hjust = 0.5))+
   ggtitle("Length-Weight log10a vs b of G. oyena")+
   xlab("b")+

@@ -56,7 +56,7 @@ collected1 <- data.frame(b, coll_log_a)
 ggplot()+
   geom_point(comp2, mapping=aes(x=fb_a.b, y=log_a))+
   geom_point(collected1, mapping=aes(x=b, y=coll_log_a), color="red")+
-  geom_smooth(method = lm, se = TRUE, color="blue")+
+  geom_smooth(comp2, method = lm, mapping=aes(x=fb_a.b, y=log_a), se = FALSE, color="blue")+
   theme(axis.text.x = element_text(hjust = 0.5))+
   ggtitle("Length-Weight log10a vs b of S. delicatulus")+
   xlab("b")+
