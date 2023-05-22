@@ -67,7 +67,7 @@ ggplot(Photopectoralis_bindus, aes(x=SL_cm, y=Mass_g))+
   geom_point(aes(fill=))+
   geom_smooth(method = glm, formula = y ~ I(0.023412*(x^(3.27441))), se = TRUE)+
   geom_segment(aes(x = 9.4, xend = 2.4, y = 8, yend = 8), color = "red")+
-  annotate("text" , label="y ~ 0.023412x^(3.27441)  R2 ~ ", x=8, y=4)+
+  annotate("text" , label="y ~ 0.023412x^(3.27441)  RSE ~ 0.1675", x=8, y=4)+
   theme(axis.text.x = element_text(hjust = 0.5))+
   ggtitle("LWR of P. bindus")+
   xlab("SL_cm")+

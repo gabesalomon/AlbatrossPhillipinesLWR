@@ -28,8 +28,6 @@ lines(xS, yfit, col=2)
 a <- 0.007912
 b <- 3.154975
 summary(nls1)
-compdata <- data.frame(xS, y)
-rsq = lm(y ~ afit * xS ^ bfit, data = compdata)
 summary(nls1)$coeffdetermination
 
 # Plot S. delicatulus ----
@@ -67,7 +65,19 @@ ggplot(Spratelloides_delicatulus, aes(x=SL_cm, y=Mass_g))+
   geom_point(aes(fill=))+
   geom_smooth(method = glm, formula = y ~ I(0.007912*(x^(3.154975))), se = TRUE)+
   geom_segment(aes(x = 6.4, xend = 1.6, y = 2, yend = 2), color = "red")+
-  annotate("text" , label="y ~ 0.007912x^(3.154975)  R2 ~ ", x=3.5, y=1.5)+
+  annotate("text" , label="y ~ 0.007912x^(3.154975)  RSE ~ 0.1009", x=3.5, y=1.5)+
+  theme(axis.text.x = element_text(hjust = 0.5))+
+  ggtitle("LWR of S. delicatulus")+
+  xlab("SL_cm")+
+  ylab("Mass_g")
+
+ # Incomplete R2
+compdata <- data.frame(xS, y)
+rsq = c(log(y) ~ deriv(0.007912) + (3.154975(log(xS))), data = compdata)
+summary(rsq)
+
+ggplot(rsq, aes(x=data.xS, y=data.y))+
+  geom_point(aes(fill=))+
   theme(axis.text.x = element_text(hjust = 0.5))+
   ggtitle("LWR of S. delicatulus")+
   xlab("SL_cm")+

@@ -67,7 +67,7 @@ ggplot(Siganus_fuscescens, aes(x=SL_cm, y=Mass_g))+
   geom_point(aes(fill=))+
   geom_smooth(method = glm, formula = y ~ I(0.018735*(x^(3.022117))), se = TRUE)+
   geom_segment(aes(x = 20, xend = 3, y = 10, yend = 10), color = "red")+
-  annotate("text" , label="y ~ 0.018735x^(3.022117)  R2 ~ ", x=10, y=4)+
+  annotate("text" , label="y ~ 0.018735x^(3.022117)  RSE ~ 0.212", x=10, y=4)+
   theme(axis.text.x = element_text(hjust = 0.5))+
   ggtitle("LWR of S. fuscescens")+
   xlab("SL_cm")+

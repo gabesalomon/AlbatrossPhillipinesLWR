@@ -67,7 +67,7 @@ ggplot(Kuhlia_marginata, aes(x=SL_cm, y=Mass_g))+
   geom_point(aes(fill=))+
   geom_smooth(method = glm, formula = y ~ I(0.012192*(x^(3.212346))), se = TRUE)+
   geom_segment(aes(x = 15, xend = 4, y = 17, yend = 17), color = "red")+
-  annotate("text" , label="y ~ 0.012192x^(3.212346)  R2 ~ ", x=6, y=11)+
+  annotate("text" , label="y ~ 0.012192x^(3.212346)  RSE ~ 0.4723", x=6, y=11)+
   theme(axis.text.x = element_text(hjust = 0.5))+
   ggtitle("LWR of K. marginata")+
   xlab("SL_cm")+

@@ -69,8 +69,8 @@ filtered_data <- fb_s_obtusata %>% filter(fb_s_obtusata$EsQ != "yes")
 ggplot(Sphyraena_obtusata, aes(x=SL_cm, y=Mass_g))+
   geom_point(aes(fill=))+
   geom_smooth(method = glm, formula = y ~ I(0.0024577*(x^(3.3447781))), se = TRUE)+
-  geom_segment(aes(x = 26, xend = 13, y = 8, yend = 8), color = "red")+
-  annotate("text" , label="y ~ 0.0024577x^(3.3447781)  R2 ~ ", x=10, y=5)+
+  geom_segment(aes(x = 26, xend = 13, y = 3.5, yend = 3.5), color = "red")+
+  annotate("text" , label="y ~ 0.0024577x^(3.3447781)  RSE ~ 0.07108", x=12.5, y=2)+
   theme(axis.text.x = element_text(hjust = 0.5))+
   ggtitle("LWR of S. obtusata")+
   xlab("SL_cm")+

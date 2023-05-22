@@ -66,7 +66,7 @@ ggplot(Spratelloides_gracilis, aes(x=SL_cm, y=Mass_g))+
   geom_point(aes(fill=))+
   geom_smooth(method = glm, formula = y ~ I(0.0059858*(x^(3.1470502))), se = TRUE)+
   geom_segment(aes(x = 10, xend = 3, y = 2, yend = 2), color = "red")+
-  annotate("text" , label="y ~ 0.0059858x^(3.1470502)  R2 ~ ", x=3.5, y=1.5)+
+  annotate("text" , label="y ~ 0.0059858x^(3.1470502)  RSE ~ 0.06427", x=3.5, y=1.5)+
   theme(axis.text.x = element_text(hjust = 0.5))+
   ggtitle("LWR of S. gracilis")+
   xlab("SL_cm")+

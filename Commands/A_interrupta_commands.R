@@ -67,7 +67,7 @@ ggplot(Ambassis_interrupta, aes(x=SL_cm, y=Mass_g))+
   geom_point(aes(fill=))+
   geom_smooth(method = glm, formula = y ~ I(0.031066*(x^(2.92208))), se = TRUE)+
   geom_segment(aes(x = 12, xend = 5, y = 10, yend = 10), color = "red")+
-  annotate("text" , label="y ~ 0.031066x^(2.92208)  R2 ~ ", x=4, y=8)+
+  annotate("text" , label="y ~ 0.031066x^(2.92208)  RSE ~ 0.623 ", x=4, y=8)+
   theme(axis.text.x = element_text(hjust = 0.5))+
   ggtitle("LWR of A. interrupta")+
   xlab("SL_cm")+

@@ -67,7 +67,7 @@ ggplot(Gerres_oyena, aes(x=SL_cm, y=Mass_g))+
   geom_point(aes(fill=))+
   geom_smooth(method = glm, formula = y ~ I(0.01193*(x^(3.27441))), se = TRUE)+
   geom_segment(aes(x = 19, xend = 2.8, y = 2, yend = 2), color = "red")+
-  annotate("text" , label="y ~ 0.01193x^(3.27441)  R2 ~ ", x=8, y=30)+
+  annotate("text" , label="y ~ 0.01193x^(3.27441)  RSE ~ 1.128", x=8, y=30)+
   theme(axis.text.x = element_text(hjust = 0.5))+
   ggtitle("LWR of G. oyena")+
   xlab("SL_cm")+

@@ -27,6 +27,7 @@ yfit <- coef(nls1)[1]*xS^coef(nls1)[2]
 lines(xS, yfit, col=2)
 a <- 0.008736
 b <- 3.192777
+rsquared_eq <- lm(y~(0.008736)((xS)^(3.192777)))
 summary(nls1)
 summary(nls1)$coeffdetermination
 
@@ -67,7 +68,7 @@ ggplot(Glossogobius_giuris, aes(x=SL_cm, y=Mass_g))+
   geom_point(aes(fill=))+
   geom_smooth(method = glm, formula = y ~ I(0.008736*(x^(3.192777))), se = TRUE)+
   geom_segment(aes(x = 17, xend = 2.8, y = 11, yend = 11), color = "red")+
-  annotate("text" , label="y ~ 0.008736x^(3.192777)  R2 ~ ", x=5, y=10)+
+  annotate("text" , label="y ~ 0.008736x^(3.192777)  RSE ~ 0.2931", x=5, y=10)+
   theme(axis.text.x = element_text(hjust = 0.5))+
   ggtitle("LWR of G. giuris")+
   xlab("SL_cm")+
