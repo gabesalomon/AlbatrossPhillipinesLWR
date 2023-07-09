@@ -16,13 +16,13 @@ library(nls2)
 install.packages("patchwork")
 library(patchwork)
 
-# S. obtusata Dataset ----
-Sphyraena_obtusata <- read_excel("AlbatrossPhillipinesLWR/Albatross_Raw_Data/Sphyraena_obtusata.xlsx")
-View(Sphyraena_obtusata)
-summary(Sphyraena_obtusata)
-y <- c(Sphyraena_obtusata$Mass_g)
-xS <- c(Sphyraena_obtusata$SL_cm)
-xT <- c(Sphyraena_obtusata$TL_cm)
+# D. duodecimalis Dataset ----
+Doboatherina_duodecimalis <- read_excel("AlbatrossPhillipinesLWR/Albatross_Raw_Data/Doboatherina_duodecimalis.xlsx")
+View(Doboatherina_duodecimalis)
+summary(Doboatherina_duodecimalis)
+y <- c(Doboatherina_duodecimalis$Mass_g)
+xS <- c(Doboatherina_duodecimalis$SL_cm)
+xT <- c(Doboatherina_duodecimalis$TL_cm)
 
 #Standard Error ----
 sqrt(sum((y-mean(y))^2/(length(y)-1)))/sqrt(length(y))
@@ -34,27 +34,27 @@ nls1 <- nls(y ~ afit*xS^bfit, data.frame(xS , y), start = list(afit=1, bfit=1))
 print(nls1)
 yfit <- coef(nls1)[1]*xS^coef(nls1)[2]
 lines(xS, yfit, col=2)
-a <- 0.0024577
-b <- 3.3447781
+a <- 0.0097448
+b <- 3.1910590
 summary(nls1)
 summary(nls1)$coeffdetermination
 
-# Plot S. obtusata ----
-ggplot(Sphyraena_obtusata, aes(x=SL_cm, y=Mass_g))+
+# Plot D. duodecimalis ----
+ggplot(Doboatherina_duodecimalis, aes(x=SL_cm, y=Mass_g))+
   geom_point(aes(fill=))+
-  geom_smooth(method = glm, formula = y ~ I(0.0024577*(x^(3.3447781))), se = FALSE)+
+  geom_smooth(method = glm, formula = y ~ I(0.0097448*(x^(3.1910590))), se = FALSE)+
   theme(axis.text.x = element_text(hjust = 0.5))+
-  ggtitle("LWR of S. obtusata")+
+  ggtitle("LWR of D. duodecimalis")+
   xlab("SL_cm")+
   ylab("Mass_g")
 
 # Fishbase comparison ----
-length_weight("Sphyraena obtusata")
-fb_a <- c(length_weight("Sphyraena obtusata"))
+length_weight("Doboatherina duodecimalis")
+fb_a <- c(length_weight("Doboatherina duodecimalis"))
 compar1 <- data.frame(var0 = c(a,b), var1 = c(fb_a$a,fb_a$b))
 
 log_a <- log10(fb_a$a)
-color <- c("black","green","black","black","black","black","black","black","black","green")
+color <- c("black","black")
 data.frame(fb_a$b, log_a, color)
 comp2 <- data.frame(fb_a$b, log_a, color)
 
@@ -66,21 +66,18 @@ ggplot()+
   geom_point(collected1, mapping=aes(x=b, y=coll_log_a), color="red")+
   geom_smooth(comp2, method = lm, mapping=aes(x=fb_a.b, y=log_a), se = FALSE, color="blue")+
   theme(axis.text.x = element_text(hjust = 0.5))+
-  ggtitle("Length-Weight log10a vs b of S. obtusata")+
+  ggtitle("Length-Weight log10a vs b of D. duodecimalis")+
   xlab("b")+
   ylab("log10a")
 
-fb_s_obtusata <- length_weight("Sphyraena obtusata") 
-filtered_data <- fb_s_obtusata %>% filter(fb_s_obtusata$EsQ != "yes") 
-  
+
 # Annotated Graph ---- 
-ggplot(Sphyraena_obtusata, aes(x=SL_cm, y=Mass_g))+
+ggplot(Doboatherina_duodecimalis, aes(x=SL_cm, y=Mass_g))+
   geom_point(aes(fill=))+
-  geom_smooth(method = glm, formula = y ~ I(0.0024577*(x^(3.3447781))), se = TRUE)+
-  geom_segment(aes(x = 26, xend = 13, y = 3.5, yend = 3.5), color = "red")+
-  annotate("text" , label="y ~ 0.0024577x^(3.3447781)  RSE ~ 0.07108", x=12.5, y=2)+
+  geom_smooth(method = glm, formula = y ~ I(0.0097448*(x^(3.1910590))), se = TRUE)+
+  geom_segment(aes(x = 10.4, xend = 2.8, y = 8, yend = 8), color = "red")+
+  annotate("text" , label="y ~ 0.0097448x^(3.1910590)  RSE ~ 0.1456", x=8, y=4)+
   theme(axis.text.x = element_text(hjust = 0.5))+
-  ggtitle("LWR of S. obtusata")+
+  ggtitle("LWR of D. duodecimalis")+
   xlab("SL_cm")+
   ylab("Mass_g")
-

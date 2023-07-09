@@ -1,10 +1,19 @@
-# Libraries ----
+# Libraries ( Load only libraries if not first time) ----
+install.packages("pacman")
 library(pacman)
+install.packages("rlang")
+library(rlang)
+install.packages("ggpubr")
 library(ggpubr)
+install.packages("rfishbase")
 library(rfishbase)
+install.packages("readxl")
 library(readxl)
+install.packages("ggplot2")
 library(ggplot2)
+install.packages("nls2")
 library(nls2)
+install.packages("patchwork")
 library(patchwork)
 
 # K. marginata Dataset ----
