@@ -33,21 +33,21 @@ The portion of the _Albatross_ Phillipine exedition collection sampled from was 
 
  <br>
 
-### Navigating Files
+## Navigating Files
 
 ----
 
-#Albatross_Raw_Data
+### Albatross_Raw_Data
 
 Includes the length and weight measurement data for each species, organized by species as well as together in the Albatross_LWR_Raw_Data.xlsx folder. The Calculated_variables.xlsx lists values of _a_ and _b_, residual standard error (RSE), min and max collected lengths, location, and collection date.
 
 
-#Commands
+### Commands
 
 Contains the R code that produces figures for each species. Running commands in the order listed will produce the ..._LWR_SL figure with no annotation first, the ..._log10a_b figure showing the comparison to other reported LWR studies, and the ..._LWR_SL_2 figure showing annotations.
 
 
-#Figures
+### Figures
 
 Contains figures for each species for which Albatross LWR data was collected. 
 
