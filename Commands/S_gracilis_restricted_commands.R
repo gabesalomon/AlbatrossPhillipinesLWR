@@ -17,12 +17,12 @@ library(nls2)
 library(patchwork)
 
 # S. gracilis Dataset ----
-Spratelloides_gracilis <- read_excel("AlbatrossPhillipinesLWR/Albatross_Raw_Data/Spratelloides_gracilis.xlsx")
-View(Spratelloides_gracilis)
-summary(Spratelloides_gracilis)
-y <- c(Spratelloides_gracilis$Mass_g)
-xS <- c(Spratelloides_gracilis$SL_cm)
-xT <- c(Spratelloides_gracilis$TL_cm)
+Spratelloides_gracilis_restricted <- read_excel("AlbatrossPhillipinesLWR/Albatross_Raw_Data/Matching_LWR_data/Spratelloides_gracilis_restricted.xlsx")
+View(Spratelloides_gracilis_restricted)
+summary(Spratelloides_gracilis_restricted)
+y <- c(Spratelloides_gracilis_restricted$Mass_g)
+xS <- c(Spratelloides_gracilis_restricted$SL_cm)
+xT <- c(Spratelloides_gracilis_restricted$TL_cm)
 
 #Standard Error ----
 sqrt(sum((y-mean(y))^2/(length(y)-1)))/sqrt(length(y))
@@ -34,14 +34,15 @@ nls1 <- nls(y ~ afit*xS^bfit, data.frame(xS , y), start=list(afit=.5, bfit=.5))
 print(nls1)
 yfit <- coef(nls1)[1]*xS^coef(nls1)[2]
 lines(xS, yfit, col=2)
-a <- 0.0059858
-b <- 3.1470502
+a <- 0.007467
+b <- 2.988969
 summary(nls1)
+summary(nls1)$coeffdetermination
 
 # Plot S. gracilis ----
-ggplot(Spratelloides_gracilis, aes(x=SL_cm, y=Mass_g))+
+ggplot(Spratelloides_gracilis_restricted, aes(x=SL_cm, y=Mass_g))+
   geom_point(aes(fill=))+
-  geom_smooth(method = glm, formula = y ~ I(0.0059858*(x^(3.1470502))), se = FALSE)+
+  geom_smooth(method = glm, formula = y ~ I(0.007467*(x^(2.988969))), se = FALSE)+
   theme(axis.text.x = element_text(hjust = 0.5))+
   ggtitle("LWR of S. gracilis")+
   xlab("SL_cm")+
@@ -67,35 +68,15 @@ ggplot()+
   ggtitle("Length-Weight log10a vs b of S. gracilis")+
   xlab("b")+
   ylab("log10a")
-  
-  
-  # Annotated Graph ---- 
-ggplot(Spratelloides_gracilis, aes(x=SL_cm, y=Mass_g))+
+
+
+# Annotated Graph ---- 
+ggplot(Spratelloides_gracilis_restricted, aes(x=SL_cm, y=Mass_g))+
   geom_point(aes(fill=))+
-  geom_smooth(method = glm, formula = y ~ I(0.0059858*(x^(3.1470502))), se = TRUE)+
+  geom_smooth(method = glm, formula = y ~ I(0.007467*(x^(2.988969))), se = TRUE)+
   geom_segment(aes(x = 10, xend = 3, y = 2, yend = 2), color = "red")+
-  annotate("text" , label="y ~ 0.0059858x^(3.1470502)  RSE ~ 0.06427", x=3.5, y=1.5)+
+  annotate("text" , label="y ~ 0.007467x^(2.988969)  RSE ~ 0.05461", x=5, y=1.5)+
   theme(axis.text.x = element_text(hjust = 0.5))+
   ggtitle("LWR of S. gracilis")+
   xlab("SL_cm")+
   ylab("Mass_g")
-
-# Relative condition factor 
-exp_weight <- ((a)*((xS)^(b)))
-Kn <- (y)/(exp_weight)
-rcf <- data.frame(xS, Kn)
-avg_Kn <- mean(Kn)
-avg_Kn
-rKn <- (exp_weight)/((a)*(xS))
-cf <- ((100)*((y)/(xS)^(3)))
-avg_cf <- mean(cf)
-avg_cf
-
-ggplot(rcf, aes(x=xS, y=Kn))+
-  geom_point(aes(fill=))+
-  geom_smooth(method = lm)+
-  annotate("text" , label="Average Kn = 1.003948", x=3, y=1.25)+  
-  theme(axis.text.x = element_text(hjust = 0.5))+
-  ggtitle("Relative Condition Factor (Kn) of S. gracilis")+
-  xlab("SL_cm")+
-  ylab("Kn")

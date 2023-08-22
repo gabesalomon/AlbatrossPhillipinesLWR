@@ -17,12 +17,12 @@ library(nls2)
 library(patchwork)
 
 # S. fuscescens Dataset ----
-Siganus_fuscescens <- read_excel("AlbatrossPhillipinesLWR/Albatross_Raw_Data/Siganus_fuscescens.xlsx")
-View(Siganus_fuscescens)
-summary(Siganus_fuscescens)
-y <- c(Siganus_fuscescens$Mass_g)
-xS <- c(Siganus_fuscescens$SL_cm)
-xT <- c(Siganus_fuscescens$TL_cm)
+Siganus_fuscescens_restricted <- read_excel("AlbatrossPhillipinesLWR/Albatross_Raw_Data/Matching_LWR_data/Siganus_fuscescens_restricted.xlsx")
+View(Siganus_fuscescens_restricted)
+summary(Siganus_fuscescens_restricted)
+y <- c(Siganus_fuscescens_restricted$Mass_g)
+xS <- c(Siganus_fuscescens_restricted$SL_cm)
+xT <- c(Siganus_fuscescens_restricted$TL_cm)
 
 #Standard Error ----
 sqrt(sum((y-mean(y))^2/(length(y)-1)))/sqrt(length(y))
@@ -34,15 +34,15 @@ nls1 <- nls(y ~ afit*xS^bfit, data.frame(xS , y), start = list(afit=1, bfit=1))
 print(nls1)
 yfit <- coef(nls1)[1]*xS^coef(nls1)[2]
 lines(xS, yfit, col=2)
-a <- 0.018735
-b <- 3.022117
+a <- 0.05021
+b <- 2.52718
 summary(nls1)
 summary(nls1)$coeffdetermination
 
 # Plot S. fuscescens ----
-ggplot(Siganus_fuscescens, aes(x=SL_cm, y=Mass_g))+
+ggplot(Siganus_fuscescens_restricted, aes(x=SL_cm, y=Mass_g))+
   geom_point(aes(fill=))+
-  geom_smooth(method = glm, formula = y ~ I(0.018735*(x^(3.022117))), se = FALSE)+
+  geom_smooth(method = glm, formula = y ~ I(0.05021*(x^(2.52718))), se = FALSE)+
   theme(axis.text.x = element_text(hjust = 0.5))+
   ggtitle("LWR of S. fuscescens")+
   xlab("SL_cm")+
@@ -71,33 +71,14 @@ ggplot()+
   ylab("log10a")
 
 
-  # Annotated Graph ---- 
-ggplot(Siganus_fuscescens, aes(x=SL_cm, y=Mass_g))+
+# Annotated Graph ---- 
+ggplot(Siganus_fuscescens_restricted, aes(x=SL_cm, y=Mass_g))+
   geom_point(aes(fill=))+
-  geom_smooth(method = glm, formula = y ~ I(0.018735*(x^(3.022117))), se = TRUE)+
+  geom_smooth(method = glm, formula = y ~ I(0.05021*(x^(2.52718))), se = TRUE)+
   geom_segment(aes(x = 20, xend = 3, y = 10, yend = 10), color = "red")+
-  annotate("text" , label="y ~ 0.018735x^(3.022117)  RSE ~ 0.212", x=10, y=4)+
+  annotate("text" , label="y ~ 0.05021x^(2.52718)  RSE ~ 0.6569", x=10, y=4)+
   theme(axis.text.x = element_text(hjust = 0.5))+
   ggtitle("LWR of S. fuscescens")+
   xlab("SL_cm")+
   ylab("Mass_g")
 
-# Relative condition factor 
-exp_weight <- ((a)*((xS)^(b)))
-Kn <- (y)/(exp_weight)
-rcf <- data.frame(xS, Kn)
-avg_Kn <- mean(Kn)
-avg_Kn
-rKn <- (exp_weight)/((a)*(xS))
-cf <- ((100)*((y)/(xS)^(3)))
-avg_cf <- mean(cf)
-avg_cf
-
-ggplot(rcf, aes(x=xS, y=Kn))+
-  geom_point(aes(fill=))+
-  geom_smooth(method = lm)+
-  annotate("text" , label="Average Kn = 0.8993142", x=6, y=1.25)+  
-  theme(axis.text.x = element_text(hjust = 0.5))+
-  ggtitle("Relative Condition Factor (Kn) of S. fuscescens")+
-  xlab("SL_cm")+
-  ylab("Kn")

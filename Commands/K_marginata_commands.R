@@ -1,19 +1,19 @@
 # Libraries ( Load only libraries if not first time) ----
 install.packages("pacman")
-library(pacman)
 install.packages("rlang")
-library(rlang)
 install.packages("ggpubr")
-library(ggpubr)
 install.packages("rfishbase")
-library(rfishbase)
 install.packages("readxl")
-library(readxl)
 install.packages("ggplot2")
-library(ggplot2)
 install.packages("nls2")
-library(nls2)
 install.packages("patchwork")
+library(pacman)
+library(rlang)
+library(ggpubr)
+library(rfishbase)
+library(readxl)
+library(ggplot2)
+library(nls2)
 library(patchwork)
 
 # K. marginata Dataset ----
@@ -37,7 +37,6 @@ lines(xS, yfit, col=2)
 a <- 0.012192
 b <- 3.212346
 summary(nls1)
-summary(nls1)$coeffdetermination
 
 # Plot K. marginata ----
 ggplot(Kuhlia_marginata, aes(x=SL_cm, y=Mass_g))+
@@ -81,3 +80,23 @@ ggplot(Kuhlia_marginata, aes(x=SL_cm, y=Mass_g))+
   ggtitle("LWR of K. marginata")+
   xlab("SL_cm")+
   ylab("Mass_g")
+
+# Relative condition factor 
+exp_weight <- ((a)*((xS)^(b)))
+Kn <- (y)/(exp_weight)
+rcf <- data.frame(xS, Kn)
+avg_Kn <- mean(Kn)
+avg_Kn
+rKn <- (exp_weight)/((a)*(xS))
+cf <- ((100)*((y)/(xS)^(3)))
+avg_cf <- mean(cf)
+avg_cf
+
+ggplot(rcf, aes(x=xS, y=Kn))+
+  geom_point(aes(fill=))+
+  geom_smooth(method = lm)+
+  annotate("text" , label="Average Kn = 1.000058", x=9, y=1.1)+  
+  theme(axis.text.x = element_text(hjust = 0.5))+
+  ggtitle("Relative Condition Factor (Kn) of K. marginata")+
+  xlab("SL_cm")+
+  ylab("Kn")

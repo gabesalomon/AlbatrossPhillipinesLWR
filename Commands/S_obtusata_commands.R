@@ -1,19 +1,19 @@
 # Libraries ( Load only libraries if not first time) ----
 install.packages("pacman")
-library(pacman)
 install.packages("rlang")
-library(rlang)
 install.packages("ggpubr")
-library(ggpubr)
 install.packages("rfishbase")
-library(rfishbase)
 install.packages("readxl")
-library(readxl)
 install.packages("ggplot2")
-library(ggplot2)
 install.packages("nls2")
-library(nls2)
 install.packages("patchwork")
+library(pacman)
+library(rlang)
+library(ggpubr)
+library(rfishbase)
+library(readxl)
+library(ggplot2)
+library(nls2)
 library(patchwork)
 
 # S. obtusata Dataset ----
@@ -37,7 +37,6 @@ lines(xS, yfit, col=2)
 a <- 0.0024577
 b <- 3.3447781
 summary(nls1)
-summary(nls1)$coeffdetermination
 
 # Plot S. obtusata ----
 ggplot(Sphyraena_obtusata, aes(x=SL_cm, y=Mass_g))+
@@ -84,3 +83,22 @@ ggplot(Sphyraena_obtusata, aes(x=SL_cm, y=Mass_g))+
   xlab("SL_cm")+
   ylab("Mass_g")
 
+# Relative condition factor 
+exp_weight <- ((a)*((xS)^(b)))
+Kn <- (y)/(exp_weight)
+rcf <- data.frame(xS, Kn)
+avg_Kn <- mean(Kn)
+avg_Kn
+rKn <- (exp_weight)/((a)*(xS))
+cf <- ((100)*((y)/(xS)^(3)))
+avg_cf <- mean(cf)
+avg_cf
+
+ggplot(rcf, aes(x=xS, y=Kn))+
+  geom_point(aes(fill=))+
+  geom_smooth(method = lm)+
+  annotate("text" , label="Average Kn = 1.003704", x=7, y=1.15)+  
+  theme(axis.text.x = element_text(hjust = 0.5))+
+  ggtitle("Relative Condition Factor (Kn) of S. obtusata")+
+  xlab("SL_cm")+
+  ylab("Kn")

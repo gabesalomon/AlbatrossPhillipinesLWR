@@ -1,19 +1,19 @@
 # Libraries ( Load only libraries if not first time) ----
 install.packages("pacman")
-library(pacman)
 install.packages("rlang")
-library(rlang)
 install.packages("ggpubr")
-library(ggpubr)
 install.packages("rfishbase")
-library(rfishbase)
 install.packages("readxl")
-library(readxl)
 install.packages("ggplot2")
-library(ggplot2)
 install.packages("nls2")
-library(nls2)
 install.packages("patchwork")
+library(pacman)
+library(rlang)
+library(ggpubr)
+library(rfishbase)
+library(readxl)
+library(ggplot2)
+library(nls2)
 library(patchwork)
 
 # G. giuris Dataset ----
@@ -36,9 +36,7 @@ yfit <- coef(nls1)[1]*xS^coef(nls1)[2]
 lines(xS, yfit, col=2)
 a <- 0.008736
 b <- 3.192777
-rsquared_eq <- lm(y~(0.008736)((xS)^(3.192777)))
 summary(nls1)
-summary(nls1)$coeffdetermination
 
 # Plot G. giuris ----
 ggplot(Glossogobius_giuris, aes(x=SL_cm, y=Mass_g))+
@@ -82,3 +80,23 @@ ggplot(Glossogobius_giuris, aes(x=SL_cm, y=Mass_g))+
   ggtitle("LWR of G. giuris")+
   xlab("SL_cm")+
   ylab("Mass_g")
+
+# Relative condition factor 
+exp_weight <- ((a)*((xS)^(b)))
+Kn <- (y)/(exp_weight)
+rcf <- data.frame(xS, Kn)
+avg_Kn <- mean(Kn)
+avg_Kn
+rKn <- (exp_weight)/((a)*(xS))
+cf <- ((100)*((y)/(xS)^(3)))
+avg_cf <- mean(cf)
+avg_cf
+
+ggplot(rcf, aes(x=xS, y=Kn))+
+  geom_point(aes(fill=))+
+  geom_smooth(method = lm)+
+  annotate("text" , label="Average Kn = 1.022411", x=6, y=1.25)+  
+  theme(axis.text.x = element_text(hjust = 0.5))+
+  ggtitle("Relative Condition Factor (Kn) of G. giuris")+
+  xlab("SL_cm")+
+  ylab("Kn")

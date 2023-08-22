@@ -17,12 +17,12 @@ library(nls2)
 library(patchwork)
 
 # S. delicatulus Dataset ----
-Spratelloides_delicatulus <- read_excel("AlbatrossPhillipinesLWR/Albatross_Raw_Data/Spratelloides_delicatulus.xlsx")
-View(Spratelloides_delicatulus)
-summary(Spratelloides_delicatulus)
-y <- c(Spratelloides_delicatulus$Mass_g)
-xS <- c(Spratelloides_delicatulus$SL_cm)
-xT <- c(Spratelloides_delicatulus$TL_cm)
+Spratelloides_delicatulus_restricted <- read_excel("AlbatrossPhillipinesLWR/Albatross_Raw_Data/Matching_LWR_data/Spratelloides_delicatulus_restricted.xlsx")
+View(Spratelloides_delicatulus_restricted)
+summary(Spratelloides_delicatulus_restricted)
+y <- c(Spratelloides_delicatulus_restricted$Mass_g)
+xS <- c(Spratelloides_delicatulus_restricted$SL_cm)
+xT <- c(Spratelloides_delicatulus_restricted$TL_cm)
 
 #Standard Error ----
 sqrt(sum((y-mean(y))^2/(length(y)-1)))/sqrt(length(y))
@@ -34,14 +34,15 @@ nls1 <- nls(y ~ afit*xS^bfit, data.frame(xS , y), start = list(afit=.5, bfit=.5)
 print(nls1)
 yfit <- coef(nls1)[1]*xS^coef(nls1)[2]
 lines(xS, yfit, col=2)
-a <- 0.007912
-b <- 3.154975
+a <- 0.008220
+b <- 3.130741
 summary(nls1)
+summary(nls1)$coeffdetermination
 
 # Plot S. delicatulus ----
-ggplot(Spratelloides_delicatulus, aes(x=SL_cm, y=Mass_g))+
+ggplot(Spratelloides_delicatulus_restricted, aes(x=SL_cm, y=Mass_g))+
   geom_point(aes(fill=))+
-  geom_smooth(method = glm, formula = y ~ I(0.007912*(x^(3.154975))), se = TRUE)+
+  geom_smooth(method = glm, formula = y ~ I(0.008220*(x^(3.130741))), se = TRUE)+
   theme(axis.text.x = element_text(hjust = 0.5))+
   ggtitle("LWR of S. delicatulus")+
   xlab("SL_cm")+
@@ -67,21 +68,21 @@ ggplot()+
   ggtitle("Length-Weight log10a vs b of S. delicatulus")+
   xlab("b")+
   ylab("log10a")
-  
-  # Annotated Graph ---- 
-ggplot(Spratelloides_delicatulus, aes(x=SL_cm, y=Mass_g))+
+
+# Annotated Graph ---- 
+ggplot(Spratelloides_delicatulus_restricted, aes(x=SL_cm, y=Mass_g))+
   geom_point(aes(fill=))+
-  geom_smooth(method = glm, formula = y ~ I(0.007912*(x^(3.154975))), se = TRUE)+
+  geom_smooth(method = glm, formula = y ~ I(0.008220*(x^(3.130741))), se = TRUE)+
   geom_segment(aes(x = 6.4, xend = 1.6, y = 2, yend = 2), color = "red")+
-  annotate("text" , label="y ~ 0.007912x^(3.154975)  RSE ~ 0.1009", x=3.5, y=1.5)+
+  annotate("text" , label="y ~ 0.008220^(3.130741)  RSE ~ 0.1146", x=3.5, y=1.5)+
   theme(axis.text.x = element_text(hjust = 0.5))+
   ggtitle("LWR of S. delicatulus")+
   xlab("SL_cm")+
   ylab("Mass_g")
 
- # Incomplete R2
+# Incomplete R2
 compdata <- data.frame(xS, y)
-rsq = c(log(y) ~ deriv(0.007912) + (3.154975(log(xS))), data = compdata)
+rsq = c(log(y) ~ deriv(0.008220) + (3.130741(log(xS))), data = compdata)
 summary(rsq)
 
 ggplot(rsq, aes(x=data.xS, y=data.y))+
@@ -91,22 +92,5 @@ ggplot(rsq, aes(x=data.xS, y=data.y))+
   xlab("SL_cm")+
   ylab("Mass_g")
 
-# Relative condition factor 
-exp_weight <- ((a)*((xS)^(b)))
-Kn <- (y)/(exp_weight)
-rcf <- data.frame(xS, Kn)
-avg_Kn <- mean(Kn)
-avg_Kn
-rKn <- (exp_weight)/((a)*(xS))
-cf <- ((100)*((y)/(xS)^(3)))
-avg_cf <- mean(cf)
-avg_cf
+# Relative condition factor incomplete 
 
-ggplot(rcf, aes(x=xS, y=Kn))+
-  geom_point(aes(fill=))+
-  geom_smooth(method = lm)+
-  annotate("text" , label="Average Kn = 0.9733541", x=2.75, y=1.2)+  
-  theme(axis.text.x = element_text(hjust = 0.5))+
-  ggtitle("Relative Condition Factor (Kn) of S. delicatulus")+
-  xlab("SL_cm")+
-  ylab("Kn")

@@ -16,13 +16,13 @@ library(ggplot2)
 library(nls2)
 library(patchwork)
 
-# S. fuscescens Dataset ----
-Siganus_fuscescens <- read_excel("AlbatrossPhillipinesLWR/Albatross_Raw_Data/Siganus_fuscescens.xlsx")
-View(Siganus_fuscescens)
-summary(Siganus_fuscescens)
-y <- c(Siganus_fuscescens$Mass_g)
-xS <- c(Siganus_fuscescens$SL_cm)
-xT <- c(Siganus_fuscescens$TL_cm)
+# G. oyena Dataset ----
+Gerres_oyena_restricted <- read_excel("AlbatrossPhillipinesLWR/Albatross_Raw_Data/Matching_LWR_data/Gerres_oyena_restricted.xlsx")
+View(Gerres_oyena_restricted)
+summary(Gerres_oyena_restricted)
+y <- c(Gerres_oyena_restricted$Mass_g)
+xS <- c(Gerres_oyena_restricted$SL_cm)
+xT <- c(Gerres_oyena_restricted$TL_cm)
 
 #Standard Error ----
 sqrt(sum((y-mean(y))^2/(length(y)-1)))/sqrt(length(y))
@@ -34,23 +34,23 @@ nls1 <- nls(y ~ afit*xS^bfit, data.frame(xS , y), start = list(afit=1, bfit=1))
 print(nls1)
 yfit <- coef(nls1)[1]*xS^coef(nls1)[2]
 lines(xS, yfit, col=2)
-a <- 0.018735
-b <- 3.022117
+a <- 0.013367
+b <- 3.231499
 summary(nls1)
-summary(nls1)$coeffdetermination
+r2 <- summary(nls1)$coeffdetermination
 
-# Plot S. fuscescens ----
-ggplot(Siganus_fuscescens, aes(x=SL_cm, y=Mass_g))+
+# Plot G. oyena ----
+ggplot(Gerres_oyena_restricted, aes(x=SL_cm, y=Mass_g))+
   geom_point(aes(fill=))+
-  geom_smooth(method = glm, formula = y ~ I(0.018735*(x^(3.022117))), se = FALSE)+
+  geom_smooth(method = glm, formula = y ~ I(0.013367*(x^(3.231499))), se = FALSE)+
   theme(axis.text.x = element_text(hjust = 0.5))+
-  ggtitle("LWR of S. fuscescens")+
+  ggtitle("LWR of G. oyena")+
   xlab("SL_cm")+
   ylab("Mass_g")
 
 # Fishbase comparison ----
-length_weight("Siganus fuscescens")
-fb_a <- c(length_weight("Siganus fuscescens"))
+length_weight("Gerres oyena")
+fb_a <- c(length_weight("Gerres oyena"))
 compar1 <- data.frame(var0 = c(a,b), var1 = c(fb_a$a,fb_a$b))
 
 log_a <- log10(fb_a$a)
@@ -66,38 +66,18 @@ ggplot()+
   geom_point(collected1, mapping=aes(x=b, y=coll_log_a), color="red")+
   geom_smooth(comp2, method = lm, mapping=aes(x=fb_a.b, y=log_a), se = FALSE, color="blue")+
   theme(axis.text.x = element_text(hjust = 0.5))+
-  ggtitle("Length-Weight log10a vs b of S. fuscescens")+
+  ggtitle("Length-Weight log10a vs b of G. oyena")+
   xlab("b")+
   ylab("log10a")
 
 
-  # Annotated Graph ---- 
-ggplot(Siganus_fuscescens, aes(x=SL_cm, y=Mass_g))+
+# Annotated Graph ---- 
+ggplot(Gerres_oyena_restricted, aes(x=SL_cm, y=Mass_g))+
   geom_point(aes(fill=))+
-  geom_smooth(method = glm, formula = y ~ I(0.018735*(x^(3.022117))), se = TRUE)+
-  geom_segment(aes(x = 20, xend = 3, y = 10, yend = 10), color = "red")+
-  annotate("text" , label="y ~ 0.018735x^(3.022117)  RSE ~ 0.212", x=10, y=4)+
+  geom_smooth(method = glm, formula = y ~ I(0.013367*(x^(3.231499))), se = TRUE)+
+  geom_segment(aes(x = 19, xend = 2.8, y = 2, yend = 2), color = "red")+
+  annotate("text" , label="y ~ 0.013367x^(3.231499)  RSE ~ 0.5396", x=8, y=30)+
   theme(axis.text.x = element_text(hjust = 0.5))+
-  ggtitle("LWR of S. fuscescens")+
+  ggtitle("LWR of G. oyena")+
   xlab("SL_cm")+
   ylab("Mass_g")
-
-# Relative condition factor 
-exp_weight <- ((a)*((xS)^(b)))
-Kn <- (y)/(exp_weight)
-rcf <- data.frame(xS, Kn)
-avg_Kn <- mean(Kn)
-avg_Kn
-rKn <- (exp_weight)/((a)*(xS))
-cf <- ((100)*((y)/(xS)^(3)))
-avg_cf <- mean(cf)
-avg_cf
-
-ggplot(rcf, aes(x=xS, y=Kn))+
-  geom_point(aes(fill=))+
-  geom_smooth(method = lm)+
-  annotate("text" , label="Average Kn = 0.8993142", x=6, y=1.25)+  
-  theme(axis.text.x = element_text(hjust = 0.5))+
-  ggtitle("Relative Condition Factor (Kn) of S. fuscescens")+
-  xlab("SL_cm")+
-  ylab("Kn")

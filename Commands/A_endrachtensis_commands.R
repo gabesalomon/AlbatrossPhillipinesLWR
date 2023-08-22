@@ -16,13 +16,13 @@ library(ggplot2)
 library(nls2)
 library(patchwork)
 
-# S. fuscescens Dataset ----
-Siganus_fuscescens <- read_excel("AlbatrossPhillipinesLWR/Albatross_Raw_Data/Siganus_fuscescens.xlsx")
-View(Siganus_fuscescens)
-summary(Siganus_fuscescens)
-y <- c(Siganus_fuscescens$Mass_g)
-xS <- c(Siganus_fuscescens$SL_cm)
-xT <- c(Siganus_fuscescens$TL_cm)
+# S. delicatulus Dataset ----
+Atherinomorus_endrachtensis <- read_excel("AlbatrossPhillipinesLWR/Albatross_Raw_Data/Atherinomorus_endrachtensis.xlsx")
+View(Atherinomorus_endrachtensis)
+summary(Atherinomorus_endrachtensis)
+y <- c(Atherinomorus_endrachtensis$Mass_g)
+xS <- c(Atherinomorus_endrachtensis$SL_cm)
+xT <- c(Atherinomorus_endrachtensis$TL_cm)
 
 #Standard Error ----
 sqrt(sum((y-mean(y))^2/(length(y)-1)))/sqrt(length(y))
@@ -30,55 +30,51 @@ sqrt(sum((xS-mean(xS))^2/(length(xS)-1)))/sqrt(length(xS))
 sqrt(sum((xT-mean(xT))^2/(length(xT)-1)))/sqrt(length(xT))
 
 # Desired eq.: Mass_g = a*SL_cm^b (SL) ----
-nls1 <- nls(y ~ afit*xS^bfit, data.frame(xS , y), start = list(afit=1, bfit=1))
+nls1 <- nls(y ~ afit*xS^bfit, data.frame(xS , y), start = list(afit=.5, bfit=.5))
 print(nls1)
 yfit <- coef(nls1)[1]*xS^coef(nls1)[2]
 lines(xS, yfit, col=2)
-a <- 0.018735
-b <- 3.022117
+a <- 0.0059859
+b <- 3.5772218
 summary(nls1)
-summary(nls1)$coeffdetermination
 
-# Plot S. fuscescens ----
-ggplot(Siganus_fuscescens, aes(x=SL_cm, y=Mass_g))+
+# Plot A. endrachtensis ----
+ggplot(Atherinomorus_endrachtensis, aes(x=SL_cm, y=Mass_g))+
   geom_point(aes(fill=))+
-  geom_smooth(method = glm, formula = y ~ I(0.018735*(x^(3.022117))), se = FALSE)+
+  geom_smooth(method = glm, formula = y ~ I(0.0059859*(x^(3.5772218))), se = TRUE)+
   theme(axis.text.x = element_text(hjust = 0.5))+
-  ggtitle("LWR of S. fuscescens")+
+  ggtitle("LWR of A. endrachtensis")+
   xlab("SL_cm")+
   ylab("Mass_g")
 
 # Fishbase comparison ----
-length_weight("Siganus fuscescens")
-fb_a <- c(length_weight("Siganus fuscescens"))
+length_weight("Atherinomorus endrachtensis")
+fb_a <- c(length_weight("Atherinomorus endrachtensis"))
 compar1 <- data.frame(var0 = c(a,b), var1 = c(fb_a$a,fb_a$b))
 
 log_a <- log10(fb_a$a)
-color <- c("black","black","green","green")
-data.frame(fb_a$b, log_a, color)
-comp2 <- data.frame(fb_a$b, log_a, color)
+data.frame(fb_a$b, log_a)
+comp2 <- data.frame(fb_a$b, log_a)
 
 coll_log_a <- log10(a)
 collected1 <- data.frame(b, coll_log_a)
 
 ggplot()+
-  geom_point(comp2, mapping=aes(x=fb_a.b, y=log_a), color=color)+
+  geom_point(comp2, mapping=aes(x=fb_a.b, y=log_a))+
   geom_point(collected1, mapping=aes(x=b, y=coll_log_a), color="red")+
   geom_smooth(comp2, method = lm, mapping=aes(x=fb_a.b, y=log_a), se = FALSE, color="blue")+
   theme(axis.text.x = element_text(hjust = 0.5))+
-  ggtitle("Length-Weight log10a vs b of S. fuscescens")+
+  ggtitle("Length-Weight log10a vs b of A. endrachtensis")+
   xlab("b")+
   ylab("log10a")
 
-
-  # Annotated Graph ---- 
-ggplot(Siganus_fuscescens, aes(x=SL_cm, y=Mass_g))+
+# Annotated Graph ---- 
+ggplot(Atherinomorus_endrachtensis, aes(x=SL_cm, y=Mass_g))+
   geom_point(aes(fill=))+
-  geom_smooth(method = glm, formula = y ~ I(0.018735*(x^(3.022117))), se = TRUE)+
-  geom_segment(aes(x = 20, xend = 3, y = 10, yend = 10), color = "red")+
-  annotate("text" , label="y ~ 0.018735x^(3.022117)  RSE ~ 0.212", x=10, y=4)+
+  geom_smooth(method = glm, formula = y ~ I(0.0059859*(x^(3.5772218))), se = TRUE)+
+  annotate("text" , label="y ~ 0.0059859x^(3.5772218)  RSE ~ 0.2423", x=3.5, y=4.5)+
   theme(axis.text.x = element_text(hjust = 0.5))+
-  ggtitle("LWR of S. fuscescens")+
+  ggtitle("LWR of A. endrachtensis")+
   xlab("SL_cm")+
   ylab("Mass_g")
 
@@ -96,8 +92,10 @@ avg_cf
 ggplot(rcf, aes(x=xS, y=Kn))+
   geom_point(aes(fill=))+
   geom_smooth(method = lm)+
-  annotate("text" , label="Average Kn = 0.8993142", x=6, y=1.25)+  
+  annotate("text" , label="Average Kn = 0.9637977", x=3, y=1.25)+  
   theme(axis.text.x = element_text(hjust = 0.5))+
-  ggtitle("Relative Condition Factor (Kn) of S. fuscescens")+
+  ggtitle("Relative Condition Factor (Kn) of A. endrachtensis")+
   xlab("SL_cm")+
   ylab("Kn")
+  
+  
