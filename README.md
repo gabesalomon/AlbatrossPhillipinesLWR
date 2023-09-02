@@ -1,5 +1,5 @@
 # AlbatrossPhillipinesLWR
-**Length-weight relationship and condition factor of museum specimens preserved in ethanol**
+**Estimation of length-weight relationship and condition factor of museum specimens preserved in ethanol**
 
 <br>
 
@@ -37,9 +37,9 @@ The portion of the _Albatross_ Phillipine exedition collection sampled from was 
 
 ----
 
-### Albatross_Raw_Data
+### Data
 
-Includes the length and weight measurement data for each species, organized by species as well as together in the Albatross_LWR_Raw_Data.xlsx folder. The Calculated_variables.xlsx lists values of _a_ and _b_, residual standard error (RSE), min and max collected lengths, location, and collection date.
+Includes the length and weight measurement data for each species, organized by species as well as together in the Albatross_LWR_Raw_Data.xlsx excel file. The Calculated_variables.xlsx lists values of _a_ and _b_, residual standard error (RSE), multiple R-squared, Relative condition factor (Le Cren, 1951), Fulton's condition factor (Fulton, 1932), min and max collected lengths, location, and collection date.
 
 
 ### Commands
