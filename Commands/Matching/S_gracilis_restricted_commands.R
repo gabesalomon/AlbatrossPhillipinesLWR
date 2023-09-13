@@ -80,7 +80,7 @@ ggplot(Spratelloides_gracilis_restricted, aes(x=SL_cm, y=Mass_g))+
   xlab("SL_cm")+
   ylab("Mass_g")
 
-# Relative condition factor 
+# Relative condition factor ----
 exp_weight <- ((a)*((xS)^(b)))
 Kn <- (y)/(exp_weight)
 rcf <- data.frame(xS, Kn)
@@ -100,7 +100,7 @@ ggplot(rcf, aes(x=xS, y=Kn))+
   xlab("SL_cm")+
   ylab("Kn")
 
-#Linear regression formula
+#Linear regression formula ----
 logw <- log10(y)
 logl <- log10(xS)
 
@@ -122,3 +122,64 @@ ggplot(logxS_y, aes(x=logl, y=logw))+
   ggtitle("Linear Regression model of S. gracilis")+
   xlab("log10_SL_cm")+
   ylab("log10_Mass_g")
+
+#Approximating shrinkage in ethanol ----
+S_gracilis_after <- read_excel("AlbatrossPhillipinesLWR/Data/One_month_LWR_data/S_gracilis_after.xlsx")
+View(S_gracilis_after)
+summary(S_gracilis_after)
+
+Spratelloides_gracilis_fresh <- read_excel("AlbatrossPhillipinesLWR/Data/Fresh_LWR_data/Spratelloides_gracilis_fresh.xlsx")
+View(Spratelloides_gracilis_fresh)
+summary(Spratelloides_gracilis_fresh)
+
+xS_before <- c(Spratelloides_gracilis_fresh$SL_cm)
+wt_before <- c(Spratelloides_gracilis_fresh$Mass_g)
+xS_after <- c(S_gracilis_after$Standard_length_mm)
+wt_after <- c(S_gracilis_after$wt_g_after)
+wt_before_comp <- data.frame(xS_before, wt_before)
+wt_after_comp <- data.frame(xS_after, wt_after)
+
+nls_before <- nls(wt_before ~ afit*xS_before^bfit, data.frame(xS_before, wt_before), start=list(afit=.05, bfit=.05), control = nls.control(maxiter = 1000))
+print(nls_before)
+nls_after <- nls(wt_after ~ afit*xS_after^bfit, data.frame(xS_after, wt_after), start=list(afit=.05, bfit=.05), control = nls.control(maxiter = 1000))
+print(nls_after)
+summary(nls_before)
+summary(nls_after)
+
+xScomb <- c(S_gracilis_after$SL_mm_comb)
+wtcomb <- c(S_gracilis_after$wt_g_comb)
+comb <- data.frame(xScomb, wtcomb)
+
+ggplot(comb, aes(x=xScomb, y=wtcomb))+
+  geom_point()+
+  geom_smooth(method = glm, formula = y ~ I(0.007467*(x^(2.988969))), se = FALSE, color ="green")+
+  geom_smooth(method = glm, formula = y ~ I(0.007216*(x^(2.760))), se = FALSE, color = "red")+
+  geom_smooth(method = glm, formula = y ~ I(0.008303*(x^(3.394))), se = FALSE, color = "blue")+
+  theme(axis.text.x = element_text(hjust = 0.5), plot.subtitle = element_text(hjust = 0))+
+  ggtitle("Approximate shrinkage of S. gracilis")+
+  xlab("SL_cm")+
+  ylab("Mass_g")+
+  labs(caption = "Fresh = y ~ 0.007467x^(2.988969) (Green), 1 Month in EtOH = y ~ 0.007216x^(2.760) (Red) , Matching Albatross = y ~ 0.008303x^(3.394) (Blue)")
+
+
+
+#Incomplete ---- 
+y <- c(Spratelloides_gracilis_restricted$Mass_g)
+xS <- c(Spratelloides_gracilis_restricted$SL_cm)
+S_gracilis_eth <- data.frame(xS, y) 
+print(nls1)
+summary(nls1)
+beforeandafter <- data.frame(xS_before, wt_before, xS_after, wt_after)
+
+colors <- c("Fresh" = "green", "1 Month EtOH" = "red", "Mathcing Albatross" = "blue")
+ggplot(comb, aes(x=xScomb, y=wtcomb))+
+  geom_point()+
+  geom_smooth(method = glm, formula = y ~ I(0.007467*(x^(2.988969))), se = FALSE, color = "Fresh")+
+  geom_smooth(method = glm, formula = y ~ I(0.007216*(x^(2.760))), se = FALSE, color = "1 Month EtOH")+
+  geom_smooth(method = glm, formula = y ~ I(0.008303*(x^(3.394))), se = FALSE, color = "Matching Albatross")+
+  annotate("text" , label="y ~ 0.007467x^(2.988969)  RSE ~ 0.05461", x=5, y=1.5)+
+  theme(axis.text.x = element_text(hjust = 0.5))+
+  ggtitle("Approxiamte shrinkage of S. gracilis")+
+  xlab("SL_cm")+
+  ylab("Mass_g")+
+  scale_color_manual(values = colors)

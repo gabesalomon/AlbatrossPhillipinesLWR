@@ -124,3 +124,49 @@ ggplot(logxS_y, aes(x=logl, y=logw))+
   xlab("log10_SL_cm")+
   ylab("log10_Mass_g")
 
+#Approximating shrinkage in ethanol ----
+G_oyena_after <- read_excel("AlbatrossPhillipinesLWR/Data/One_month_LWR_data/G_oyena_after.xlsx")
+View(G_oyena_after)
+summary(G_oyena_after)
+
+Gerres_oyena_fresh <- read_excel("AlbatrossPhillipinesLWR/Data/Fresh_LWR_data/Gerres_oyena_fresh.xlsx")
+View(Gerres_oyena_fresh)
+summary(Gerres_oyena_fresh)
+
+xS_before <- c(Gerres_oyena_fresh$SL_cm)
+wt_before <- c(Gerres_oyena_fresh$Mass_g)
+xS_after <- c(G_oyena_after$Standard_length_mm)
+wt_after <- c(G_oyena_after$wt_g_after)
+wt_before_comp <- data.frame(xS_before, wt_before)
+wt_after_comp <- data.frame(xS_after, wt_after)
+
+nls_before <- nls(wt_before ~ afit*xS_before^bfit, data.frame(xS_before, wt_before), start=list(afit=.05, bfit=.05), control = nls.control(maxiter = 1000))
+print(nls_before)
+nls_after <- nls(wt_after ~ afit*xS_after^bfit, data.frame(xS_after, wt_after), start=list(afit=.05, bfit=.05), control = nls.control(maxiter = 1000))
+print(nls_after)
+summary(nls_before)
+summary(nls_after)
+
+xScomb <- c(G_oyena_after$SL_mm_comb)
+wtcomb <- c(G_oyena_after$wt_g_comb)
+comb <- data.frame(xScomb, wtcomb)
+
+ggplot(comb, aes(x=xScomb, y=wtcomb))+
+  geom_point()+
+  geom_smooth(method = glm, formula = y ~ I(0.006169*(x^(2.760337))), se = FALSE, color ="green")+
+  geom_smooth(method = glm, formula = y ~ I(0.010633*(x^(2.923))), se = FALSE, color = "red")+
+  geom_smooth(method = glm, formula = y ~ I(0.013367*(x^(3.231499))), se = FALSE, color = "blue")+
+  theme(axis.text.x = element_text(hjust = 0.5), plot.subtitle = element_text(hjust = 0))+
+  ggtitle("Approximate shrinkage of G. oyena")+
+  xlab("SL_cm")+
+  ylab("Mass_g")+
+  labs(caption = "Fresh = y ~ 0.006169x^(2.760337) (Green), 1 Month in EtOH = y ~ 0.010633x^(2.923) (Red) , Matching Albatross = y ~ 0.013367x^(3.231499) (Blue)")
+
+#Incomplete ---- 
+y <- c(Spratelloides_gracilis_restricted$Mass_g)
+xS <- c(Spratelloides_gracilis_restricted$SL_cm)
+S_gracilis_eth <- data.frame(xS, y) 
+print(nls1)
+summary(nls1)
+beforeandafter <- data.frame(xS_before, wt_before, xS_after, wt_after)
+
