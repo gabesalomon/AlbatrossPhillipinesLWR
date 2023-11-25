@@ -17,7 +17,7 @@ library(nls2)
 library(patchwork)
 
 # K. marginata Dataset ----
-Kuhlia_marginata <- read_excel("AlbatrossPhillipinesLWR/Data/Albatross_LWR_data/Kuhlia_marginata.xlsx")
+Kuhlia_marginata <- read_excel("AlbatrossPhillipinesLWR/Data/Albatross_LWR_data/Albatross_LWR_data.xlsx",7)
 View(Kuhlia_marginata)
 summary(Kuhlia_marginata)
 y <- c(Kuhlia_marginata$Mass_g)
@@ -44,8 +44,8 @@ ggplot(Kuhlia_marginata, aes(x=SL_cm, y=Mass_g))+
   geom_smooth(method = glm, formula = y ~ I(0.012192*(x^(3.212346))), se = FALSE)+
   theme(axis.text.x = element_text(hjust = 0.5))+
   ggtitle("LWR of K. marginata")+
-  xlab("SL_cm")+
-  ylab("Mass_g")
+  xlab("SL (cm)")+
+  ylab("Mass (g)")
 
 # Fishbase comparison ----
 length_weight("Kuhlia marginata")
@@ -74,12 +74,11 @@ ggplot()+
 ggplot(Kuhlia_marginata, aes(x=SL_cm, y=Mass_g))+
   geom_point(aes(fill=))+
   geom_smooth(method = glm, formula = y ~ I(0.012192*(x^(3.212346))), se = TRUE)+
-  geom_segment(aes(x = 15, xend = 4, y = 17, yend = 17), color = "red")+
-  annotate("text" , label="y ~ 0.012192x^(3.212346)  RSE ~ 0.4723", x=6, y=11)+
+  annotate("text" , label="y ~ 0.012192x^(3.212346)  RSE ~ 0.4723", x=8.5, y=6)+
   theme(axis.text.x = element_text(hjust = 0.5))+
   ggtitle("LWR of K. marginata")+
-  xlab("SL_cm")+
-  ylab("Mass_g")
+  xlab("SL (cm)")+
+  ylab("Mass (g)")
 
 # Relative condition factor 
 exp_weight <- ((a)*((xS)^(b)))
@@ -87,10 +86,14 @@ Kn <- (y)/(exp_weight)
 rcf <- data.frame(xS, Kn)
 avg_Kn <- mean(Kn)
 avg_Kn
+lmrcf <- lm(formula = Kn ~ xS, data = rcf)
+lmrcf
+summary(lmrcf)
 rKn <- (exp_weight)/((a)*(xS))
 cf <- ((100)*((y)/(xS)^(3)))
 avg_cf <- mean(cf)
 avg_cf
+summary(Kn)
 
 ggplot(rcf, aes(x=xS, y=Kn))+
   geom_point(aes(fill=))+
@@ -98,7 +101,7 @@ ggplot(rcf, aes(x=xS, y=Kn))+
   annotate("text" , label="Average Kn = 1.000058", x=9, y=1.1)+  
   theme(axis.text.x = element_text(hjust = 0.5))+
   ggtitle("Relative Condition Factor (Kn) of K. marginata")+
-  xlab("SL_cm")+
+  xlab("SL (cm)")+
   ylab("Kn")
 
 #Linear regression formula
@@ -121,5 +124,17 @@ ggplot(logxS_y, aes(x=logl, y=logw))+
   geom_smooth(method = lm, se = FALSE)+
   theme(axis.text.x = element_text(hjust = 0.5))+
   ggtitle("Linear Regression model of K. marginata")+
-  xlab("log10_SL_cm")+
-  ylab("log10_Mass_g")
+  xlab("log10 SL (cm)")+
+  ylab("log10 Mass (g)")
+
+# Z score (Outliers) ---- 
+avgxS <- mean(xS)
+sdxS <- sd(xS)
+zxS <- ((xS)-(avgxS)/(sdxS))
+avgz <- mean(zxS)
+avgz
+xSscore <- data.frame(xS, zxS)
+xSscore[xSscore$zxS <=3, ]
+xSscore
+xSnooutlier <- xSscore[xSscore$zxS <=3, ]
+xSnooutlier

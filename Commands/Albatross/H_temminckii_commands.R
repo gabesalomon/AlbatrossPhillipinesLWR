@@ -17,7 +17,7 @@ library(nls2)
 library(patchwork)
 
 # H. temminckii Dataset ----
-Hypoatherina_temminckii <- read_excel("AlbatrossPhillipinesLWR/Data/Albatross_LWR_data/Hypoatherina_temminckii.xlsx")
+Hypoatherina_temminckii <- read_excel("AlbatrossPhillipinesLWR/Data/Albatross_LWR_data/Albatross_LWR_data.xlsx",10)
 View(Hypoatherina_temminckii)
 summary(Hypoatherina_temminckii)
 y <- c(Hypoatherina_temminckii$Mass_g)
@@ -34,18 +34,18 @@ nls1 <- nls(y ~ afit*xS^bfit, data.frame(xS , y), start = list(afit=1, bfit=1))
 print(nls1)
 yfit <- coef(nls1)[1]*xS^coef(nls1)[2]
 lines(xS, yfit, col=2)
-a <- 0.021097
-b <- 2.648878
+a <- 0.019105
+b <- 2.686972
 summary(nls1)
 
 # Plot H. temminckii ----
 ggplot(Hypoatherina_temminckii, aes(x=SL_cm, y=Mass_g))+
   geom_point(aes(fill=))+
-  geom_smooth(method = glm, formula = y ~ I(0.021097*(x^(2.648878))), se = FALSE)+
+  geom_smooth(method = glm, formula = y ~ I(0.019105*(x^(2.686972))), se = FALSE)+
   theme(axis.text.x = element_text(hjust = 0.5))+
   ggtitle("LWR of H. temminckii")+
-  xlab("SL_cm")+
-  ylab("Mass_g")
+  xlab("SL (cm)")+
+  ylab("Mass (g)")
 
 # Fishbase comparison ---- None for this species
 length_weight("Hypoatherina temminckii")
@@ -72,12 +72,12 @@ ggplot()+
 # Annotated Graph ---- 
 ggplot(Hypoatherina_temminckii, aes(x=SL_cm, y=Mass_g))+
   geom_point(aes(fill=))+
-  geom_smooth(method = glm, formula = y ~ I(0.021097*(x^(2.648878))), se = FALSE)+
-  annotate("text" , label="y ~ 0.021097x^(2.648878)  RSE ~ 0.5987", x=5, y=5)+
+  geom_smooth(method = glm, formula = y ~ I(0.019105*(x^(2.686972))), se = FALSE)+
+  annotate("text" , label="y ~ 0.019105x^(2.686972)  RSE ~ 0.5987", x=8, y=1.5)+
   theme(axis.text.x = element_text(hjust = 0.5))+
   ggtitle("LWR of H. temminckii")+
-  xlab("SL_cm")+
-  ylab("Mass_g")
+  xlab("SL (cm)")+
+  ylab("Mass (g)")
 
 # Relative condition factor 
 exp_weight <- ((a)*((xS)^(b)))
@@ -85,18 +85,22 @@ Kn <- (y)/(exp_weight)
 rcf <- data.frame(xS, Kn)
 avg_Kn <- mean(Kn)
 avg_Kn
+lmrcf <- lm(formula = Kn ~ xS, data = rcf)
+lmrcf
+summary(lmrcf)
 rKn <- (exp_weight)/((a)*(xS))
 cf <- ((100)*((y)/(xS)^(3)))
 avg_cf <- mean(cf)
 avg_cf
+summary(Kn)
 
 ggplot(rcf, aes(x=xS, y=Kn))+
   geom_point(aes(fill=))+
   geom_smooth(method = lm)+
-  annotate("text" , label="Average Kn = 0.9682088", x=5, y=1.5)+  
+  annotate("text" , label="Average Kn = 0.9487459", x=8, y=.8)+  
   theme(axis.text.x = element_text(hjust = 0.5))+
   ggtitle("Relative Condition Factor (Kn) of H. temminckii")+
-  xlab("SL_cm")+
+  xlab("SL (cm)")+
   ylab("Kn")
 
 #Linear regression formula
@@ -119,5 +123,17 @@ ggplot(logxS_y, aes(x=logl, y=logw))+
   geom_smooth(method = lm, se = FALSE)+
   theme(axis.text.x = element_text(hjust = 0.5))+
   ggtitle("Linear Regression model of H. temminckii")+
-  xlab("log10_SL_cm")+
-  ylab("log10_Mass_g")
+  xlab("log10 SL (cm)")+
+  ylab("log10 Mass (g)")
+
+# Z score (Outliers) ---- 
+avgxS <- mean(xS)
+sdxS <- sd(xS)
+zxS <- ((xS)-(avgxS)/(sdxS))
+avgz <- mean(zxS)
+avgz
+xSscore <- data.frame(xS, zxS)
+xSscore[xSscore$zxS <=3, ]
+xSscore
+xSnooutlier <- xSscore[xSscore$zxS <=3, ]
+xSnooutlier

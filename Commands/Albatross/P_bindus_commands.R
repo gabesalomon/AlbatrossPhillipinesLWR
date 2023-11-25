@@ -17,7 +17,7 @@ library(nls2)
 library(patchwork)
 
 # P. bindus Dataset ----
-Photopectoralis_bindus <- read_excel("AlbatrossPhillipinesLWR/Data/Albatross_LWR_data/Photopectoralis_bindus.xlsx")
+Photopectoralis_bindus <- read_excel("AlbatrossPhillipinesLWR/Data/Albatross_LWR_data/Albatross_LWR_data.xlsx",5)
 View(Photopectoralis_bindus)
 summary(Photopectoralis_bindus)
 y <- c(Photopectoralis_bindus$Mass_g)
@@ -44,8 +44,8 @@ ggplot(Photopectoralis_bindus, aes(x=SL_cm, y=Mass_g))+
   geom_smooth(method = glm, formula = y ~ I(0.023412*(x^(2.980925))), se = FALSE)+
   theme(axis.text.x = element_text(hjust = 0.5))+
   ggtitle("LWR of P. bindus")+
-  xlab("SL_cm")+
-  ylab("Mass_g")
+  xlab("SL (cm)")+
+  ylab("Mass (g)")
 
 # Fishbase comparison ----
 length_weight("Photopectoralis bindus")
@@ -73,12 +73,11 @@ ggplot()+
 ggplot(Photopectoralis_bindus, aes(x=SL_cm, y=Mass_g))+
   geom_point(aes(fill=))+
   geom_smooth(method = glm, formula = y ~ I(0.023412*(x^(3.27441))), se = TRUE)+
-  geom_segment(aes(x = 9.4, xend = 2.4, y = 8, yend = 8), color = "red")+
-  annotate("text" , label="y ~ 0.023412x^(3.27441)  RSE ~ 0.1675", x=8, y=4)+
+  annotate("text" , label="y ~ 0.023412x^(3.27441)  RSE ~ 0.1675", x=6, y=2.3)+
   theme(axis.text.x = element_text(hjust = 0.5))+
   ggtitle("LWR of P. bindus")+
-  xlab("SL_cm")+
-  ylab("Mass_g")
+  xlab("SL (cm)")+
+  ylab("Mass (g)")
 
 # Relative condition factor 
 exp_weight <- ((a)*((xS)^(b)))
@@ -86,18 +85,22 @@ Kn <- (y)/(exp_weight)
 rcf <- data.frame(xS, Kn)
 avg_Kn <- mean(Kn)
 avg_Kn
+lmrcf <- lm(formula = Kn ~ xS, data = rcf)
+lmrcf
+summary(lmrcf)
 rKn <- (exp_weight)/((a)*(xS))
 cf <- ((100)*((y)/(xS)^(3)))
 avg_cf <- mean(cf)
 avg_cf
+summary(Kn)
 
 ggplot(rcf, aes(x=xS, y=Kn))+
   geom_point(aes(fill=))+
   geom_smooth(method = lm)+
-  annotate("text" , label="Average Kn = 1.001289", x=4.25, y=.9)+  
+  annotate("text" , label="Average Kn = 1.001289", x=5.8, y=.9)+  
   theme(axis.text.x = element_text(hjust = 0.5))+
   ggtitle("Relative Condition Factor (Kn) of P. bindus")+
-  xlab("SL_cm")+
+  xlab("SL (cm)")+
   ylab("Kn")
 
 #Linear regression formula
@@ -120,5 +123,17 @@ ggplot(logxS_y, aes(x=logl, y=logw))+
   geom_smooth(method = lm, se = FALSE)+
   theme(axis.text.x = element_text(hjust = 0.5))+
   ggtitle("Linear Regression model of P. bindus")+
-  xlab("log10_SL_cm")+
-  ylab("log10_Mass_g")
+  xlab("log10 SL (cm)")+
+  ylab("log10 Mass (g)")
+
+# Z score (Outliers) ---- 
+avgxS <- mean(xS)
+sdxS <- sd(xS)
+zxS <- ((xS)-(avgxS)/(sdxS))
+avgz <- mean(zxS)
+avgz
+xSscore <- data.frame(xS, zxS)
+xSscore[xSscore$zxS <=3, ]
+xSscore
+xSnooutlier <- xSscore[xSscore$zxS <=3, ]
+xSnooutlier

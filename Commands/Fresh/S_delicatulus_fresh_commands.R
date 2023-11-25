@@ -17,7 +17,7 @@ library(nls2)
 library(patchwork)
 
 # S. delicatulus Dataset ----
-Spratelloides_delicatulus_fresh <- read_excel("AlbatrossPhillipinesLWR/Data/Fresh_LWR_Data/Spratelloides_delicatulus_fresh.xlsx")
+Spratelloides_delicatulus_fresh <- read_excel("AlbatrossPhillipinesLWR/Data/Fresh_LWR_Data/Fresh_LWR_Data.xlsx",3)
 View(Spratelloides_delicatulus_fresh)
 summary(Spratelloides_delicatulus_fresh)
 y <- c(Spratelloides_delicatulus_fresh$Mass_g)
@@ -34,18 +34,18 @@ nls1 <- nls(y ~ afit*xS^bfit, data.frame(xS , y), start = list(afit=1, bfit=1))
 print(nls1)
 yfit <- coef(nls1)[1]*xS^coef(nls1)[2]
 lines(xS, yfit, col=2)
-a <- 0.03206
-b <- 2.38442
+a <- 0.018127
+b <- 2.733211
 summary(nls1)
 
 # Plot S. delicatulus ----
 ggplot(Spratelloides_delicatulus_fresh, aes(x=SL_cm, y=Mass_g))+
   geom_point(aes(fill=))+
-  geom_smooth(method = glm, formula = y ~ I(0.03206*(x^(2.38442))), se = FALSE)+
+  geom_smooth(method = glm, formula = y ~ I(0.018127*(x^(2.733211))), se = FALSE)+
   theme(axis.text.x = element_text(hjust = 0.5))+
   ggtitle("LWR of Fresh S. delicatulus")+
-  xlab("SL_cm")+
-  ylab("Mass_g")
+  xlab("SL (cm)")+
+  ylab("Mass (g)")
 
 # Fishbase comparison ----
 length_weight("Spratelloides delicatulus")
@@ -72,13 +72,12 @@ ggplot()+
 # Annotated Graph ---- 
 ggplot(Spratelloides_delicatulus_fresh, aes(x=SL_cm, y=Mass_g))+
   geom_point(aes(fill=))+
-  geom_smooth(method = glm, formula = y ~ I(0.03206*(x^(2.38442))), se = TRUE)+
-  geom_segment(aes(x = 6.4, xend = 1.6, y = 2, yend = 2), color = "red")+
-  annotate("text" , label="y ~ 0.03206x^(2.38442)  RSE ~ 0.2387", x=4, y=4)+
+  geom_smooth(method = glm, formula = y ~ I(0.018127*(x^(2.733211))), se = TRUE)+
+  annotate("text" , label="y ~ 0.018127x^(2.733211)  RSE ~ 0.2053", x=5, y=.6)+
   theme(axis.text.x = element_text(hjust = 0.5))+
   ggtitle("LWR of Fresh S. delicatulus")+
-  xlab("SL_cm")+
-  ylab("Mass_g")
+  xlab("SL (cm)")+
+  ylab("Mass (g)")
 
 # Relative condition factor 
 exp_weight <- ((a)*((xS)^(b)))
@@ -86,18 +85,22 @@ Kn <- (y)/(exp_weight)
 rcf <- data.frame(xS, Kn)
 avg_Kn <- mean(Kn)
 avg_Kn
+lmrcf <- lm(formula = Kn ~ xS, data = rcf)
+lmrcf
+summary(lmrcf)
 rKn <- (exp_weight)/((a)*(xS))
 cf <- ((100)*((y)/(xS)^(3)))
 avg_cf <- mean(cf)
 avg_cf
+summary(Kn)
 
 ggplot(rcf, aes(x=xS, y=Kn))+
   geom_point(aes(fill=))+
   geom_smooth(method = lm)+
-  annotate("text" , label="Average Kn = 0.9994838", x=3.6, y=1.25)+  
+  annotate("text" , label="Average Kn = 0.999", x=4, y=1.15)+  
   theme(axis.text.x = element_text(hjust = 0.5))+
   ggtitle("Relative Condition Factor (Kn) of S. delicatulus")+
-  xlab("SL_cm")+
+  xlab("SL (cm)")+
   ylab("Kn")
 
 #Linear regression formula
@@ -120,5 +123,17 @@ ggplot(logxS_y, aes(x=logl, y=logw))+
   geom_smooth(method = lm, se = FALSE)+
   theme(axis.text.x = element_text(hjust = 0.5))+
   ggtitle("Linear Regression model of S. delicatulus")+
-  xlab("log10_SL_cm")+
-  ylab("log10_Mass_g")
+  xlab("log10 SL (cm)")+
+  ylab("log10 Mass (g)")
+
+# Z score (Outliers) ---- 
+avgxS <- mean(xS)
+sdxS <- sd(xS)
+zxS <- ((xS)-(avgxS)/(sdxS))
+avgz <- mean(zxS)
+avgz
+xSscore <- data.frame(xS, zxS)
+xSscore[xSscore$zxS <=3, ]
+xSscore
+xSnooutlier <- xSscore[xSscore$zxS <=3, ]
+xSnooutlier

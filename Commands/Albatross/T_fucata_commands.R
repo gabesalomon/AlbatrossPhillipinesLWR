@@ -18,7 +18,7 @@ library(nls2)
 library(patchwork)
 
 # T. fucata Dataset ----
-Taeniamia_fucata <- read_excel("AlbatrossPhillipinesLWR/Data/Albatross_LWR_data/Taeniamia_fucata.xlsx")
+Taeniamia_fucata <- read_excel("AlbatrossPhillipinesLWR/Data/Albatross_LWR_data/Albatross_LWR_data.xlsx",11)
 View(Taeniamia_fucata)
 summary(Taeniamia_fucata)
 y <- c(Taeniamia_fucata$Mass_g)
@@ -45,8 +45,8 @@ ggplot(Taeniamia_fucata, aes(x=SL_cm, y=Mass_g))+
   geom_smooth(method = glm, formula = y ~ I(0.0149764*(x^(3.1846790))), se = FALSE)+
   theme(axis.text.x = element_text(hjust = 0.5))+
   ggtitle("LWR of T. fucata")+
-  xlab("SL_cm")+
-  ylab("Mass_g")
+  xlab("SL (cm)")+
+  ylab("Mass (g)")
 
 # Fishbase comparison ----
 length_weight("Taeniamia fucata")
@@ -75,12 +75,11 @@ ggplot()+
 ggplot(Taeniamia_fucata, aes(x=SL_cm, y=Mass_g))+
   geom_point(aes(fill=))+
   geom_smooth(method = glm, formula = y ~ I(0.0149764*(x^(3.1846790))), se = TRUE)+
-  geom_segment(aes(x = 8.5, xend = 5.2, y = 8, yend = 8), color = "red")+
-  annotate("text" , label="y ~ 0.0149764x^(3.1846790)  RSE ~ 0.01793", x=3, y=4)+
+  annotate("text" , label="y ~ 0.0149764x^(3.1846790)  RSE ~ 0.01793", x=4.4, y=.4)+
   theme(axis.text.x = element_text(hjust = 0.5))+
   ggtitle("LWR of T. fucata")+
-  xlab("SL_cm")+
-  ylab("Mass_g")
+  xlab("SL (cm)")+
+  ylab("Mass (g)")
 
 # Relative condition factor 
 exp_weight <- ((a)*((xS)^(b)))
@@ -88,18 +87,22 @@ Kn <- (y)/(exp_weight)
 rcf <- data.frame(xS, Kn)
 avg_Kn <- mean(Kn)
 avg_Kn
+lmrcf <- lm(formula = Kn ~ xS, data = rcf)
+lmrcf
+summary(lmrcf)
 rKn <- (exp_weight)/((a)*(xS))
 cf <- ((100)*((y)/(xS)^(3)))
 avg_cf <- mean(cf)
 avg_cf
+summary(Kn)
 
 ggplot(rcf, aes(x=xS, y=Kn))+
   geom_point(aes(fill=))+
   geom_smooth(method = lm)+
-  annotate("text" , label="Average Kn = 0.9592584", x=3, y=1.2)+  
+  annotate("text" , label="Average Kn = 0.9592584", x=4, y=.84)+  
   theme(axis.text.x = element_text(hjust = 0.5))+
   ggtitle("Relative Condition Factor (Kn) of T. fucata")+
-  xlab("SL_cm")+
+  xlab("SL (cm)")+
   ylab("Kn")
 
 #Linear regression formula
@@ -122,6 +125,17 @@ ggplot(logxS_y, aes(x=logl, y=logw))+
   geom_smooth(method = lm, se = FALSE)+
   theme(axis.text.x = element_text(hjust = 0.5))+
   ggtitle("Linear Regression model of T. fucata")+
-  xlab("log10_SL_cm")+
-  ylab("log10_Mass_g")
+  xlab("log10 SL (cm)")+
+  ylab("log10 Mass (g)")
 
+# Z score (Outliers) ---- 
+avgxS <- mean(xS)
+sdxS <- sd(xS)
+zxS <- ((xS)-(avgxS)/(sdxS))
+avgz <- mean(zxS)
+avgz
+xSscore <- data.frame(xS, zxS)
+xSscore[xSscore$zxS <=3, ]
+xSscore
+xSnooutlier <- xSscore[xSscore$zxS <=3, ]
+xSnooutlier

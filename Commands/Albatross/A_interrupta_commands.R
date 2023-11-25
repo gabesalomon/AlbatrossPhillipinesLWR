@@ -17,7 +17,7 @@ library(nls2)
 library(patchwork)
 
 # A. interrupta Dataset ----
-Ambassis_interrupta <- read_excel("AlbatrossPhillipinesLWR/Data/Albatross_LWR_data/Ambassis_interrupta.xlsx")
+Ambassis_interrupta <- read_excel("AlbatrossPhillipinesLWR/Data/Albatross_LWR_data/Albatross_LWR_data.xlsx",6)
 View(Ambassis_interrupta)
 summary(Ambassis_interrupta)
 y <- c(Ambassis_interrupta$Mass_g)
@@ -44,8 +44,8 @@ ggplot(Ambassis_interrupta, aes(x=SL_cm, y=Mass_g))+
   geom_smooth(method = glm, formula = y ~ I(0.031066*(x^(2.92208))), se = FALSE)+
   theme(axis.text.x = element_text(hjust = 0.5))+
   ggtitle("LWR of A. interrupta")+
-  xlab("SL_cm")+
-  ylab("Mass_g")
+  xlab("SL (cm)")+
+  ylab("Mass (g)")
 
 # Fishbase comparison ----
 length_weight("Ambassis interrupta")
@@ -74,12 +74,11 @@ ggplot()+
 ggplot(Ambassis_interrupta, aes(x=SL_cm, y=Mass_g))+
   geom_point(aes(fill=))+
   geom_smooth(method = glm, formula = y ~ I(0.031066*(x^(2.92208))), se = TRUE)+
-  geom_segment(aes(x = 12, xend = 5, y = 10, yend = 10), color = "red")+
-  annotate("text" , label="y ~ 0.031066x^(2.92208)  RSE ~ 0.623 ", x=4, y=8)+
+  annotate("text" , label="y ~ 0.031066x^(2.92208)  RSE ~ 0.623 ", x=6.4, y=2.4)+
   theme(axis.text.x = element_text(hjust = 0.5))+
   ggtitle("LWR of A. interrupta")+
-  xlab("SL_cm")+
-  ylab("Mass_g")
+  xlab("SL (cm)")+
+  ylab("Mass (g)")
 
 # Relative condition factor 
 exp_weight <- ((a)*((xS)^(b)))
@@ -87,18 +86,22 @@ Kn <- (y)/(exp_weight)
 rcf <- data.frame(xS, Kn)
 avg_Kn <- mean(Kn)
 avg_Kn
+lmrcf <- lm(formula = Kn ~ xS, data = rcf)
+lmrcf
+summary(lmrcf)
 rKn <- (exp_weight)/((a)*(xS))
 cf <- ((100)*((y)/(xS)^(3)))
 avg_cf <- mean(cf)
 avg_cf
+summary(Kn)
 
 ggplot(rcf, aes(x=xS, y=Kn))+
   geom_point(aes(fill=))+
   geom_smooth(method = lm)+
-  annotate("text" , label="Average Kn = 0.9179409", x=6, y=1.25)+  
+  annotate("text" , label="Average Kn = 0.9179409", x=6.4, y=.75)+  
   theme(axis.text.x = element_text(hjust = 0.5))+
   ggtitle("Relative Condition Factor (Kn) of A. interrupta")+
-  xlab("SL_cm")+
+  xlab("SL (cm)")+
   ylab("Kn")
 
 #Linear regression formula
@@ -121,5 +124,17 @@ ggplot(logxS_y, aes(x=logl, y=logw))+
   geom_smooth(method = lm, se = FALSE)+
   theme(axis.text.x = element_text(hjust = 0.5))+
   ggtitle("Linear Regression model of A. interrupta")+
-  xlab("log10_SL_cm")+
-  ylab("log10_Mass_g")
+  xlab("log10 SL (cm)")+
+  ylab("log10 Mass (g)")
+
+# Z score (Outliers) ---- 
+avgxS <- mean(xS)
+sdxS <- sd(xS)
+zxS <- ((xS)-(avgxS)/(sdxS))
+avgz <- mean(zxS)
+avgz
+xSscore <- data.frame(xS, zxS)
+xSscore[xSscore$zxS <=3, ]
+xSscore
+xSnooutlier <- xSscore[xSscore$zxS <=3, ]
+xSnooutlier

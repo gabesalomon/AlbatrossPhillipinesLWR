@@ -17,7 +17,7 @@ library(nls2)
 library(patchwork)
 
 # S. delicatulus Dataset ----
-Atherinomorus_endrachtensis <- read_excel("AlbatrossPhillipinesLWR/Data/Albatross_LWR_data/Atherinomorus_endrachtensis.xlsx")
+Atherinomorus_endrachtensis <- read_excel("AlbatrossPhillipinesLWR/Data/Albatross_LWR_data/Albatross_LWR_data.xlsx",13)
 View(Atherinomorus_endrachtensis)
 summary(Atherinomorus_endrachtensis)
 y <- c(Atherinomorus_endrachtensis$Mass_g)
@@ -44,10 +44,10 @@ ggplot(Atherinomorus_endrachtensis, aes(x=SL_cm, y=Mass_g))+
   geom_smooth(method = glm, formula = y ~ I(0.0059859*(x^(3.5772218))), se = TRUE)+
   theme(axis.text.x = element_text(hjust = 0.5))+
   ggtitle("LWR of A. endrachtensis")+
-  xlab("SL_cm")+
-  ylab("Mass_g")
+  xlab("SL (cm)")+
+  ylab("Mass (g)")
 
-# Fishbase comparison ---- None for this species
+# Fishbase comparison ---- None for this specie
 length_weight("Atherinomorus endrachtensis")
 fb_a <- c(length_weight("Atherinomorus endrachtensis"))
 compar1 <- data.frame(var0 = c(a,b), var1 = c(fb_a$a,fb_a$b))
@@ -72,11 +72,11 @@ ggplot()+
 ggplot(Atherinomorus_endrachtensis, aes(x=SL_cm, y=Mass_g))+
   geom_point(aes(fill=))+
   geom_smooth(method = glm, formula = y ~ I(0.0059859*(x^(3.5772218))), se = TRUE)+
-  annotate("text" , label="y ~ 0.0059859x^(3.5772218)  RSE ~ 0.2423", x=3.5, y=4.5)+
+  annotate("text" , label="y ~ 0.0059859x^(3.5772218)  RSE ~ 0.2423", x=6.75, y=1.75)+
   theme(axis.text.x = element_text(hjust = 0.5))+
   ggtitle("LWR of A. endrachtensis")+
-  xlab("SL_cm")+
-  ylab("Mass_g")
+  xlab("SL (cm)")+
+  ylab("Mass (g)")
 
 # Relative condition factor 
 exp_weight <- ((a)*((xS)^(b)))
@@ -84,18 +84,22 @@ Kn <- (y)/(exp_weight)
 rcf <- data.frame(xS, Kn)
 avg_Kn <- mean(Kn)
 avg_Kn
+lmrcf <- lm(formula = Kn ~ xS, data = rcf)
+lmrcf
+summary(lmrcf)
 rKn <- (exp_weight)/((a)*(xS))
 cf <- ((100)*((y)/(xS)^(3)))
 avg_cf <- mean(cf)
 avg_cf
+summary(Kn)
 
 ggplot(rcf, aes(x=xS, y=Kn))+
   geom_point(aes(fill=))+
   geom_smooth(method = lm)+
-  annotate("text" , label="Average Kn = 0.9637977", x=3, y=1.25)+  
+  annotate("text" , label="Average Kn = 0.9637977", x=6.75, y=.78)+  
   theme(axis.text.x = element_text(hjust = 0.5))+
   ggtitle("Relative Condition Factor (Kn) of A. endrachtensis")+
-  xlab("SL_cm")+
+  xlab("SL (cm)")+
   ylab("Kn")
 
 #Linear regression formula
@@ -118,7 +122,17 @@ ggplot(logxS_y, aes(x=logl, y=logw))+
   geom_smooth(method = lm, se = FALSE)+
   theme(axis.text.x = element_text(hjust = 0.5))+
   ggtitle("Linear Regression model of A. endrachtensis")+
-  xlab("log10_SL_cm")+
-  ylab("log10_Mass_g")
+  xlab("log10 SL (cm)")+
+  ylab("log10 Mass (g)")
   
-  
+# Z score (Outliers) ---- 
+avgxS <- mean(xS)
+sdxS <- sd(xS)
+zxS <- ((xS)-(avgxS)/(sdxS))
+avgz <- mean(zxS)
+avgz
+xSscore <- data.frame(xS, zxS)
+xSscore[xSscore$zxS <=3, ]
+xSscore
+xSnooutlier <- xSscore[xSscore$zxS <=3, ]
+xSnooutlier

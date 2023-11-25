@@ -16,13 +16,13 @@ library(ggplot2)
 library(nls2)
 library(patchwork)
 
-# S. fuscescens Dataset ----
-Siganus_fuscescens_restricted <- read_excel("AlbatrossPhillipinesLWR/Data/Matching_LWR_data/Matching_LWR_data.xlsx",1)
-View(Siganus_fuscescens_restricted)
-summary(Siganus_fuscescens_restricted)
-y <- c(Siganus_fuscescens_restricted$Mass_g)
-xS <- c(Siganus_fuscescens_restricted$SL_cm)
-xT <- c(Siganus_fuscescens_restricted$TL_cm)
+# G. oyena Dataset ----
+Gerres_oyena_restricted <- read_excel("AlbatrossPhillipinesLWR/Data/Matching_LWR_data/Matching_LWR_data.xlsx",2)
+View(Gerres_oyena_restricted)
+summary(Gerres_oyena_restricted)
+y <- c(Gerres_oyena_restricted$Mass_g)
+xS <- c(Gerres_oyena_restricted$SL_cm)
+xT <- c(Gerres_oyena_restricted$TL_cm)
 
 #Standard Error ----
 sqrt(sum((y-mean(y))^2/(length(y)-1)))/sqrt(length(y))
@@ -34,21 +34,21 @@ nls1 <- nls(y ~ afit*xS^bfit, data.frame(xS , y), start = list(afit=1, bfit=1))
 print(nls1)
 yfit <- coef(nls1)[1]*xS^coef(nls1)[2]
 lines(xS, yfit, col=2)
-a <- 0.05021
-b <- 2.52718
+a <- 0.013367
+b <- 3.231499
 summary(nls1)
 
-# Plot S. fuscescens ----
-ggplot(Siganus_fuscescens_restricted, aes(x=SL_cm, y=Mass_g))+
+# Plot G. oyena ----
+ggplot(Gerres_oyena_restricted, aes(x=SL_cm, y=Mass_g))+
   geom_point(aes(fill=))+
-  geom_smooth(method = glm, formula = y ~ I(0.05021*(x^(2.52718))), se = FALSE)+
+  geom_smooth(method = glm, formula = y ~ I(0.013367*(x^(3.231499))), se = FALSE)+
   theme(axis.text.x = element_text(hjust = 0.5))+
-  ggtitle("LWR of S. fuscescens")+
+  ggtitle("LWR of G. oyena")+
   xlab("SL (cm)")+
   ylab("Mass (g)")
 
 # Fishbase comparison ---
-log10ab <- read_excel("AlbatrossPhillipinesLWR/Data/Matching_LWR_data/loga_b_comparison.xlsx",1)
+log10ab <- read_excel("AlbatrossPhillipinesLWR/Data/Matching_LWR_data/loga_b_comparison.xlsx",2)
 log10ab_after <- na.omit(log10ab)
 View(log10ab_after)
 
@@ -56,19 +56,19 @@ ggplot(data = log10ab_after, aes(x=b, y=log10a, color=Source))+
   geom_point()+
   geom_smooth(log10ab_after, method = lm, mapping=aes(x=b, y=log10a), se = FALSE, color="blue")+
   theme(axis.text.x = element_text(hjust = 0.5))+
-  scale_color_discrete(log10ab_after$Species)+
+  scale_color_discrete(log10ab_after$Source)+
   guides(colour=guide_legend(title = "Source"))+
-  ggtitle("Length-Weight log10a vs b Comparison of S. fuscescens")+
+  ggtitle("Length-Weight log10a vs b Comparison of G. oyena")+
   xlab("b")+
   ylab("log10a")
 
 # Annotated Graph ---- 
-ggplot(Siganus_fuscescens_restricted, aes(x=SL_cm, y=Mass_g))+
+ggplot(Gerres_oyena_restricted, aes(x=SL_cm, y=Mass_g))+
   geom_point(aes(fill=))+
-  geom_smooth(method = glm, formula = y ~ I(0.05021*(x^(2.52718))), se = TRUE)+
-  annotate("text" , label="y ~ 0.05021x^(2.52718)  RSE ~ 0.6569", x=7.5, y=5)+
+  geom_smooth(method = glm, formula = y ~ I(0.013367*(x^(3.231499))), se = TRUE)+
+  annotate("text" , label="y ~ 0.013367x^(3.231499)  RSE ~ 0.5396", x=8, y=6)+
   theme(axis.text.x = element_text(hjust = 0.5))+
-  ggtitle("LWR of S. fuscescens")+
+  ggtitle("LWR of G. oyena")+
   xlab("SL (cm)")+
   ylab("Mass (g)")
 
@@ -90,9 +90,9 @@ summary(Kn)
 ggplot(rcf, aes(x=xS, y=Kn))+
   geom_point(aes(fill=))+
   geom_smooth(method = lm)+
-  annotate("text" , label="Average Kn = 1.0019", x=7.25, y=1.2)+  
+  annotate("text" , label="Average Kn = 1.002363", x=8.5, y=.925)+  
   theme(axis.text.x = element_text(hjust = 0.5))+
-  ggtitle("Relative Condition Factor (Kn) of S. fuscescens")+
+  ggtitle("Relative Condition Factor (Kn) of G. oyena")+
   xlab("SL (cm)")+
   ylab("Kn")
 
@@ -115,7 +115,7 @@ ggplot(logxS_y, aes(x=logl, y=logw))+
   geom_point(aes(fill=))+
   geom_smooth(method = lm, se = FALSE)+
   theme(axis.text.x = element_text(hjust = 0.5))+
-  ggtitle("Linear Regression model of S. fuscescens")+
+  ggtitle("Linear Regression model of G. oyena")+
   xlab("log10 SL (cm)")+
   ylab("log10 Mass (g)")
 
@@ -132,18 +132,18 @@ xSnooutlier <- xSscore[xSscore$zxS <=3, ]
 xSnooutlier
 
 #Approximating shrinkage in ethanol ----
-S_fuscescens_after <- read_excel("AlbatrossPhillipinesLWR/Data/One_month_LWR_data/One_month_LWR_data.xlsx",1)
-View(S_fuscescens_after)
-summary(S_fuscescens_after)
+G_oyena_after <- read_excel("AlbatrossPhillipinesLWR/Data/One_month_LWR_data/One_month_LWR_data.xlsx",2)
+View(G_oyena_after)
+summary(G_oyena_after)
 
-Siganus_fuscescens_fresh <- read_excel("AlbatrossPhillipinesLWR/Data/Fresh_LWR_data/Fresh_LWR_data.xlsx",1)
-View(Siganus_fuscescens_fresh)
-summary(Siganus_fuscescens_fresh)
+Gerres_oyena_fresh <- read_excel("AlbatrossPhillipinesLWR/Data/Fresh_LWR_data/Fresh_LWR_data.xlsx",2)
+View(Gerres_oyena_fresh)
+summary(Gerres_oyena_fresh)
 
-xS_before <- c(Siganus_fuscescens_fresh$SL_cm)
-wt_before <- c(Siganus_fuscescens_fresh$Mass_g)
-xS_after <- c(S_fuscescens_after$Standard_length_mm)
-wt_after <- c(S_fuscescens_after$wt_g_after)
+xS_before <- c(Gerres_oyena_fresh$SL_cm)
+wt_before <- c(Gerres_oyena_fresh$Mass_g)
+xS_after <- c(G_oyena_after$Standard_length_mm)
+wt_after <- c(G_oyena_after$wt_g_after)
 wt_before_comp <- data.frame(xS_before, wt_before)
 wt_after_comp <- data.frame(xS_after, wt_after)
 
@@ -154,20 +154,20 @@ print(nls_after)
 summary(nls_before)
 summary(nls_after)
 
-xScomb <- c(S_fuscescens_after$SL_mm_comb)
-wtcomb <- c(S_fuscescens_after$wt_g_comb)
+xScomb <- c(G_oyena_after$SL_mm_comb)
+wtcomb <- c(G_oyena_after$wt_g_comb)
 comb <- data.frame(xScomb, wtcomb)
 
 ggplot(comb, aes(x=xScomb, y=wtcomb))+
   geom_point()+
   geom_smooth(method = glm, formula = y ~ I(0.006169*(x^(2.760337))), se = FALSE, color ="green")+
-  geom_smooth(method = glm, formula = y ~ I(0.013246*(x^(2.829))), se = FALSE, color = "red")+
-  geom_smooth(method = glm, formula = y ~ I(0.05021*(x^(2.52718))), se = FALSE, color = "blue")+
+  geom_smooth(method = glm, formula = y ~ I(0.010633*(x^(2.923))), se = FALSE, color = "red")+
+  geom_smooth(method = glm, formula = y ~ I(0.013367*(x^(3.231499))), se = FALSE, color = "blue")+
   theme(axis.text.x = element_text(hjust = 0.5), plot.subtitle = element_text(hjust = 0))+
-  ggtitle("Approximate shrinkage of S. fuscescens")+
-  xlab("SL_cm")+
-  ylab("Mass_g")+
-  labs(caption = "Fresh = y ~ 0.006169x^(2.760337) (Green), 1 Month in EtOH = y ~ 0.013246x^(2.829) (Red) , Matching Albatross = y ~ 0.05021x^(2.52718) (Blue)")
+  ggtitle("Approximate shrinkage of G. oyena")+
+  xlab("SL (cm)")+
+  ylab("Mass (g)")+
+  labs(caption = "Fresh = y ~ 0.006169x^(2.760337) (Green), 1 Month in EtOH = y ~ 0.010633x^(2.923) (Red) , Matching Albatross = y ~ 0.013367x^(3.231499) (Blue)")
 
 #Incomplete ---- 
 y <- c(Spratelloides_gracilis_restricted$Mass_g)

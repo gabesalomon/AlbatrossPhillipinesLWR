@@ -16,7 +16,7 @@ library(nls2)
 library(patchwork)
 
 # G. oyena Dataset ----
-G_oyena_onemonth <- read_excel("AlbatrossPhillipinesLWR/Data/One_month_LWR_data/G_oyena_after.xlsx")
+G_oyena_onemonth <- read_excel("AlbatrossPhillipinesLWR/Data/One_month_LWR_data/One_month_LWR_data.xlsx",2)
 G_oyena_after <- na.omit(G_oyena_onemonth)
 View(G_oyena_after)
 summary(G_oyena_after)
@@ -34,18 +34,18 @@ nls1 <- nls(y ~ afit*xS^bfit, data.frame(xS , y), start = list(afit=1, bfit=1))
 print(nls1)
 yfit <- coef(nls1)[1]*xS^coef(nls1)[2]
 lines(xS, yfit, col=2)
-a <- 0.00866
-b <- 3.37706
+a <- 0.010488
+b <- 3.286204
 summary(nls1)
 
 # Plot G. oyena ----
 ggplot(G_oyena_after, aes(x=SL_cm, y=Mass_g))+
   geom_point(aes(fill=))+
-  geom_smooth(method = glm, formula = y ~ I(0.00866*(x^(3.37706))), se = FALSE)+
+  geom_smooth(method = glm, formula = y ~ I(0.010488*(x^(3.286204))), se = FALSE)+
   theme(axis.text.x = element_text(hjust = 0.5))+
   ggtitle("LWR of G. oyena after 1 month in EtOH")+
-  xlab("SL_cm")+
-  ylab("Mass_g")
+  xlab("SL (cm)")+
+  ylab("Mass (g)")
 
 # Fishbase comparison ----
 length_weight("Gerres oyena")
@@ -73,13 +73,12 @@ ggplot()+
 # Annotated Graph ---- 
 ggplot(G_oyena_after, aes(x=SL_cm, y=Mass_g))+
   geom_point(aes(fill=))+
-  geom_smooth(method = glm, formula = y ~ I(0.00866*(x^(3.37706))), se = TRUE)+
-  geom_segment(aes(x = 15, xend = 2.8, y = 2, yend = 2), color = "red")+
-  annotate("text" , label="y ~ 0.00866x^(3.37706)  RSE ~ 1.164", x=6, y=11)+
+  geom_smooth(method = glm, formula = y ~ I(0.010488*(x^(3.286204))), se = TRUE)+
+  annotate("text" , label="y ~ 0.010488x^(3.286204)  RSE ~ 0.9344", x=9, y=10)+
   theme(axis.text.x = element_text(hjust = 0.5))+
   ggtitle("LWR of G. oyena after 1 month in EtOH")+
-  xlab("SL_cm")+
-  ylab("Mass_g")
+  xlab("SL (cm)")+
+  ylab("Mass (g)")
 
 # Relative condition factor 
 exp_weight <- ((a)*((xS)^(b)))
@@ -87,18 +86,22 @@ Kn <- (y)/(exp_weight)
 rcf <- data.frame(xS, Kn)
 avg_Kn <- mean(Kn)
 avg_Kn
+lmrcf <- lm(formula = Kn ~ xS, data = rcf)
+lmrcf
+summary(lmrcf)
 rKn <- (exp_weight)/((a)*(xS))
 cf <- ((100)*((y)/(xS)^(3)))
 avg_cf <- mean(cf)
 avg_cf
+summary(Kn)
 
 ggplot(rcf, aes(x=xS, y=Kn))+
   geom_point(aes(fill=))+
   geom_smooth(method = lm)+
-  annotate("text" , label="Average Kn = 0.989864", x=7, y=1.1)+  
+  annotate("text" , label="Average Kn = 0.9993891", x=9, y=.9)+  
   theme(axis.text.x = element_text(hjust = 0.5))+
   ggtitle("Relative Condition Factor (Kn) of G. oyena after 1 month in EtOH")+
-  xlab("SL_cm")+
+  xlab("SL (cm)")+
   ylab("Kn")
 
 #Linear regression formula
@@ -121,5 +124,17 @@ ggplot(logxS_y, aes(x=logl, y=logw))+
   geom_smooth(method = lm, se = FALSE)+
   theme(axis.text.x = element_text(hjust = 0.5))+
   ggtitle("Linear Regression model of G. oyena after 1 month in EtOH")+
-  xlab("log10_SL_cm")+
-  ylab("log10_Mass_g")
+  xlab("log10 SL (cm)")+
+  ylab("log10 Mass (g)")
+
+# Z score (Outliers) ---- 
+avgxS <- mean(xS)
+sdxS <- sd(xS)
+zxS <- ((xS)-(avgxS)/(sdxS))
+avgz <- mean(zxS)
+avgz
+xSscore <- data.frame(xS, zxS)
+xSscore[xSscore$zxS <=3, ]
+xSscore
+xSnooutlier <- xSscore[xSscore$zxS <=3, ]
+xSnooutlier

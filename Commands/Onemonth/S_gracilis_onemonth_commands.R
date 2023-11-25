@@ -17,7 +17,7 @@ library(nls2)
 library(patchwork)
 
 # S. gracilis Dataset ----
-S_gracilis_onemonth <- read_excel("AlbatrossPhillipinesLWR/Data/One_month_LWR_data/S_gracilis_after.xlsx")
+S_gracilis_onemonth <- read_excel("AlbatrossPhillipinesLWR/Data/One_month_LWR_data/One_month_LWR_data.xlsx",4)
 S_gracilis_after <- na.omit(S_gracilis_onemonth)
 View(S_gracilis_after)
 summary(S_gracilis_after)
@@ -45,8 +45,8 @@ ggplot(S_gracilis_after, aes(x=SL_cm, y=Mass_g))+
   geom_smooth(method = glm, formula = y ~ I(0.003592*(x^(2.922849))), se = FALSE)+
   theme(axis.text.x = element_text(hjust = 0.5))+
   ggtitle("LWR of S. gracilis after 1 month in EtOH")+
-  xlab("SL_cm")+
-  ylab("Mass_g")
+  xlab("SL (cm)")+
+  ylab("Mass (g)")
 
 # Fishbase comparison ----
 length_weight("Spratelloides gracilis")
@@ -74,31 +74,34 @@ ggplot()+
 ggplot(S_gracilis_after, aes(x=SL_cm, y=Mass_g))+
   geom_point(aes(fill=))+
   geom_smooth(method = glm, formula = y ~ I(0.003592*(x^(2.922849))), se = TRUE)+
-  geom_segment(aes(x = 10, xend = 3, y = .75, yend = .75), color = "red")+
-  annotate("text" , label="y ~ 0.003592x^(2.922849)  RSE ~ 0.06041", x=4, y=0.5)+
+  annotate("text" , label="y ~ 0.003592x^(2.922849)  RSE ~ 0.06041", x=4.75, y=.13)+
   theme(axis.text.x = element_text(hjust = 0.5))+
   ggtitle("LWR of S. gracilis after 1 month in EtOH")+
-  xlab("SL_cm")+
-  ylab("Mass_g")
+  xlab("SL (cm)")+
+  ylab("Mass (g)")
 
-# Relative condition factor ----
+# Relative condition factor 
 exp_weight <- ((a)*((xS)^(b)))
 Kn <- (y)/(exp_weight)
 rcf <- data.frame(xS, Kn)
 avg_Kn <- mean(Kn)
 avg_Kn
+lmrcf <- lm(formula = Kn ~ xS, data = rcf)
+lmrcf
+summary(lmrcf)
 rKn <- (exp_weight)/((a)*(xS))
 cf <- ((100)*((y)/(xS)^(3)))
 avg_cf <- mean(cf)
 avg_cf
+summary(Kn)
 
 ggplot(rcf, aes(x=xS, y=Kn))+
   geom_point(aes(fill=))+
   geom_smooth(method = lm)+
-  annotate("text" , label="Average Kn = 1.007", x=4.25, y=1.25)+  
+  annotate("text" , label="Average Kn = 1.007", x=5, y=.55)+  
   theme(axis.text.x = element_text(hjust = 0.5))+
   ggtitle("Relative Condition Factor (Kn) of S. gracilis after 1 month in EtOH")+
-  xlab("SL_cm")+
+  xlab("SL (cm)")+
   ylab("Kn")
 
 #Linear regression formula ----
@@ -121,5 +124,17 @@ ggplot(logxS_y, aes(x=logl, y=logw))+
   geom_smooth(method = lm, se = FALSE)+
   theme(axis.text.x = element_text(hjust = 0.5))+
   ggtitle("Linear Regression model of S. gracilis after 1 month in EtOH")+
-  xlab("log10_SL_cm")+
-  ylab("log10_Mass_g")
+  xlab("log10 SL (cm)")+
+  ylab("log10 Mass (g)")
+
+# Z score (Outliers) ---- 
+avgxS <- mean(xS)
+sdxS <- sd(xS)
+zxS <- ((xS)-(avgxS)/(sdxS))
+avgz <- mean(zxS)
+avgz
+xSscore <- data.frame(xS, zxS)
+xSscore[xSscore$zxS <=3, ]
+xSscore
+xSnooutlier <- xSscore[xSscore$zxS <=3, ]
+xSnooutlier

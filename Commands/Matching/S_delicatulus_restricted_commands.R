@@ -17,7 +17,7 @@ library(nls2)
 library(patchwork)
 
 # S. delicatulus Dataset ----
-Spratelloides_delicatulus_restricted <- read_excel("AlbatrossPhillipinesLWR/Data/Matching_LWR_data/Spratelloides_delicatulus_restricted.xlsx")
+Spratelloides_delicatulus_restricted <- read_excel("AlbatrossPhillipinesLWR/Data/Matching_LWR_data/Matching_LWR_data.xlsx",3)
 View(Spratelloides_delicatulus_restricted)
 summary(Spratelloides_delicatulus_restricted)
 y <- c(Spratelloides_delicatulus_restricted$Mass_g)
@@ -44,27 +44,21 @@ ggplot(Spratelloides_delicatulus_restricted, aes(x=SL_cm, y=Mass_g))+
   geom_smooth(method = glm, formula = y ~ I(0.008220*(x^(3.130741))), se = TRUE)+
   theme(axis.text.x = element_text(hjust = 0.5))+
   ggtitle("LWR of S. delicatulus")+
-  xlab("SL_cm")+
-  ylab("Mass_g")
+  xlab("SL (cm)")+
+  ylab("Mass (g)")
 
-# Fishbase comparison ----
-length_weight("Spratelloides delicatulus")
-fb_a <- c(length_weight("Spratelloides delicatulus"))
-compar1 <- data.frame(var0 = c(a,b), var1 = c(fb_a$a,fb_a$b))
+# Fishbase comparison ---
+log10ab <- read_excel("AlbatrossPhillipinesLWR/Data/Matching_LWR_data/loga_b_comparison.xlsx",3)
+log10ab_after <- na.omit(log10ab)
+View(log10ab_after)
 
-log_a <- log10(fb_a$a)
-data.frame(fb_a$b, log_a)
-comp2 <- data.frame(fb_a$b, log_a)
-
-coll_log_a <- log10(a)
-collected1 <- data.frame(b, coll_log_a)
-
-ggplot()+
-  geom_point(comp2, mapping=aes(x=fb_a.b, y=log_a))+
-  geom_point(collected1, mapping=aes(x=b, y=coll_log_a), color="red")+
-  geom_smooth(comp2, method = lm, mapping=aes(x=fb_a.b, y=log_a), se = FALSE, color="blue")+
+ggplot(data = log10ab_after, aes(x=b, y=log10a, color=Source))+
+  geom_point()+
+  geom_smooth(log10ab_after, method = lm, mapping=aes(x=b, y=log10a), se = FALSE, color="blue")+
   theme(axis.text.x = element_text(hjust = 0.5))+
-  ggtitle("Length-Weight log10a vs b of S. delicatulus")+
+  scale_color_discrete(log10ab_after$Source)+
+  guides(colour=guide_legend(title = "Source"))+
+  ggtitle("Length-Weight log10a vs b Comparison of S. delicatulus")+
   xlab("b")+
   ylab("log10a")
 
@@ -72,12 +66,11 @@ ggplot()+
 ggplot(Spratelloides_delicatulus_restricted, aes(x=SL_cm, y=Mass_g))+
   geom_point(aes(fill=))+
   geom_smooth(method = glm, formula = y ~ I(0.008220*(x^(3.130741))), se = TRUE)+
-  geom_segment(aes(x = 6.4, xend = 1.6, y = 2, yend = 2), color = "red")+
-  annotate("text" , label="y ~ 0.008220^(3.130741)  RSE ~ 0.1146", x=3.5, y=1.5)+
-  theme(axis.text.x = element_text(hjust = 0.5))+
+  annotate("text" , label="y ~ 0.008220^(3.130741)  RSE ~ 0.1146", x=5, y=0.5)+
+  theme(axis.text.x = element_text(hjust = 0.5), )+
   ggtitle("LWR of S. delicatulus")+
-  xlab("SL_cm")+
-  ylab("Mass_g")
+  xlab("SL (cm)")+
+  ylab("Mass (g)")
 
 # Relative condition factor 
 exp_weight <- ((a)*((xS)^(b)))
@@ -85,18 +78,22 @@ Kn <- (y)/(exp_weight)
 rcf <- data.frame(xS, Kn)
 avg_Kn <- mean(Kn)
 avg_Kn
+lmrcf <- lm(formula = Kn ~ xS, data = rcf)
+lmrcf
+summary(lmrcf)
 rKn <- (exp_weight)/((a)*(xS))
 cf <- ((100)*((y)/(xS)^(3)))
 avg_cf <- mean(cf)
 avg_cf
+summary(Kn)
 
 ggplot(rcf, aes(x=xS, y=Kn))+
   geom_point(aes(fill=))+
   geom_smooth(method = lm)+
-  annotate("text" , label="Average Kn = 0.9991468", x=3.6, y=1.25)+  
+  annotate("text" , label="Average Kn = 0.9991468", x=5.2, y=0.85)+  
   theme(axis.text.x = element_text(hjust = 0.5))+
   ggtitle("Relative Condition Factor (Kn) of S. delicatulus")+
-  xlab("SL_cm")+
+  xlab("SL (cm)")+
   ylab("Kn")
 
 #Linear regression formula
@@ -119,15 +116,27 @@ ggplot(logxS_y, aes(x=logl, y=logw))+
   geom_smooth(method = lm, se = FALSE)+
   theme(axis.text.x = element_text(hjust = 0.5))+
   ggtitle("Linear Regression model of S. delicatulus")+
-  xlab("log10_SL_cm")+
-  ylab("log10_Mass_g")
+  xlab("log10 SL (cm)")+
+  ylab("log10 Mass (g)")
+
+# Z score (Outliers) ---- 
+avgxS <- mean(xS)
+sdxS <- sd(xS)
+zxS <- ((xS)-(avgxS)/(sdxS))
+avgz <- mean(zxS)
+avgz
+xSscore <- data.frame(xS, zxS)
+xSscore[xSscore$zxS <=3, ]
+xSscore
+xSnooutlier <- xSscore[xSscore$zxS <=3, ]
+xSnooutlier
 
 #Approximating shrinkage in ethanol ----
-S_delicatulus_after <- read_excel("AlbatrossPhillipinesLWR/Data/One_month_LWR_data/S_delicatulus_after.xlsx")
+S_delicatulus_after <- read_excel("AlbatrossPhillipinesLWR/Data/One_month_LWR_data/One_month_LWR_data.xlsx",3)
 View(S_delicatulus_after)
 summary(S_delicatulus_after)
 
-Spratelloides_delicatulus_fresh <- read_excel("AlbatrossPhillipinesLWR/Data/Fresh_LWR_data/Spratelloides_delicatulus_fresh.xlsx")
+Spratelloides_delicatulus_fresh <- read_excel("AlbatrossPhillipinesLWR/Data/Fresh_LWR_data/Fresh_LWR_data.xlsx",3)
 View(Spratelloides_delicatulus_fresh)
 summary(Spratelloides_delicatulus_fresh)
 

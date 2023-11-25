@@ -17,7 +17,7 @@ library(nls2)
 library(patchwork)
 
 # D. duodecimalis Dataset ----
-Doboatherina_duodecimalis <- read_excel("AlbatrossPhillipinesLWR/Data/Albatross_LWR_data/Doboatherina_duodecimalis.xlsx")
+Doboatherina_duodecimalis <- read_excel("AlbatrossPhillipinesLWR/Data/Albatross_LWR_data/Albatross_LWR_data.xlsx",12)
 View(Doboatherina_duodecimalis)
 summary(Doboatherina_duodecimalis)
 y <- c(Doboatherina_duodecimalis$Mass_g)
@@ -44,8 +44,8 @@ ggplot(Doboatherina_duodecimalis, aes(x=SL_cm, y=Mass_g))+
   geom_smooth(method = glm, formula = y ~ I(0.0097448*(x^(3.1910590))), se = FALSE)+
   theme(axis.text.x = element_text(hjust = 0.5))+
   ggtitle("LWR of D. duodecimalis")+
-  xlab("SL_cm")+
-  ylab("Mass_g")
+  xlab("SL (cm)")+
+  ylab("Mass (g)")
 
 # Fishbase comparison ----
 length_weight("Doboatherina duodecimalis")
@@ -69,17 +69,15 @@ ggplot()+
   xlab("b")+
   ylab("log10a")
 
-
 # Annotated Graph ---- 
 ggplot(Doboatherina_duodecimalis, aes(x=SL_cm, y=Mass_g))+
   geom_point(aes(fill=))+
   geom_smooth(method = glm, formula = y ~ I(0.0097448*(x^(3.1910590))), se = TRUE)+
-  geom_segment(aes(x = 10.4, xend = 2.8, y = 8, yend = 8), color = "red")+
-  annotate("text" , label="y ~ 0.0097448x^(3.1910590)  RSE ~ 0.1456", x=8, y=4)+
+  annotate("text" , label="y ~ 0.0097448x^(3.1910590)  RSE ~ 0.1456", x=6, y=.8)+
   theme(axis.text.x = element_text(hjust = 0.5))+
   ggtitle("LWR of D. duodecimalis")+
-  xlab("SL_cm")+
-  ylab("Mass_g")
+  xlab("SL (cm)")+
+  ylab("Mass (g)")
 
 # Relative condition factor 
 exp_weight <- ((a)*((xS)^(b)))
@@ -87,18 +85,22 @@ Kn <- (y)/(exp_weight)
 rcf <- data.frame(xS, Kn)
 avg_Kn <- mean(Kn)
 avg_Kn
+lmrcf <- lm(formula = Kn ~ xS, data = rcf)
+lmrcf
+summary(lmrcf)
 rKn <- (exp_weight)/((a)*(xS))
 cf <- ((100)*((y)/(xS)^(3)))
 avg_cf <- mean(cf)
 avg_cf
+summary(Kn)
 
 ggplot(rcf, aes(x=xS, y=Kn))+
   geom_point(aes(fill=))+
   geom_smooth(method = lm)+
-  annotate("text" , label="Average Kn = 0.9784393", x=6, y=1.25)+  
+  annotate("text" , label="Average Kn = 0.9784393", x=6, y=.75)+  
   theme(axis.text.x = element_text(hjust = 0.5))+
   ggtitle("Relative Condition Factor (Kn) of D. duodecimalis")+
-  xlab("SL_cm")+
+  xlab("SL (cm)")+
   ylab("Kn")
 
 #Linear regression formula
@@ -121,5 +123,17 @@ ggplot(logxS_y, aes(x=logl, y=logw))+
   geom_smooth(method = lm, se = FALSE)+
   theme(axis.text.x = element_text(hjust = 0.5))+
   ggtitle("Linear Regression model of D. duodecimalis")+
-  xlab("log10_SL_cm")+
-  ylab("log10_Mass_g")
+  xlab("log10 SL (cm)")+
+  ylab("log10 Mass (g)")
+
+# Z score (Outliers) ---- 
+avgxS <- mean(xS)
+sdxS <- sd(xS)
+zxS <- ((xS)-(avgxS)/(sdxS))
+avgz <- mean(zxS)
+avgz
+xSscore <- data.frame(xS, zxS)
+xSscore[xSscore$zxS <=3, ]
+xSscore
+xSnooutlier <- xSscore[xSscore$zxS <=3, ]
+xSnooutlier

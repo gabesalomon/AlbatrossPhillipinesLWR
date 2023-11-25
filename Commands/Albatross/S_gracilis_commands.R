@@ -17,7 +17,7 @@ library(nls2)
 library(patchwork)
 
 # S. gracilis Dataset ----
-Spratelloides_gracilis <- read_excel("AlbatrossPhillipinesLWR/Data/Albatross_LWR_data/Spratelloides_gracilis.xlsx")
+Spratelloides_gracilis <- read_excel("AlbatrossPhillipinesLWR/Data/Albatross_LWR_data/Albatross_LWR_data.xlsx",9)
 View(Spratelloides_gracilis)
 summary(Spratelloides_gracilis)
 y <- c(Spratelloides_gracilis$Mass_g)

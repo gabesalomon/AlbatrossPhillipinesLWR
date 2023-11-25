@@ -17,7 +17,7 @@ library(nls2)
 library(patchwork)
 
 # S. fuscescens Dataset ----
-Siganus_fuscescens_fresh <- read_excel("AlbatrossPhillipinesLWR/Data/Fresh_LWR_Data/Siganus_fuscescens_fresh.xlsx")
+Siganus_fuscescens_fresh <- read_excel("AlbatrossPhillipinesLWR/Data/Fresh_LWR_Data/Fresh_LWR_Data.xlsx",1)
 View(Siganus_fuscescens_fresh)
 summary(Siganus_fuscescens_fresh)
 y <- c(Siganus_fuscescens_fresh$Mass_g)
@@ -34,18 +34,18 @@ nls1 <- nls(y ~ afit*xS^bfit, data.frame(xS , y), start = list(afit=1, bfit=1))
 print(nls1)
 yfit <- coef(nls1)[1]*xS^coef(nls1)[2]
 lines(xS, yfit, col=2)
-a <- 0.03144
-b <- 2.81276
+a <- 0.018816
+b <- 3.070236
 summary(nls1)
 
 # Plot S. fuscescens ----
 ggplot(Siganus_fuscescens_fresh, aes(x=SL_cm, y=Mass_g))+
   geom_point(aes(fill=))+
-  geom_smooth(method = glm, formula = y ~ I(0.03144*(x^(2.81276))), se = FALSE)+
+  geom_smooth(method = glm, formula = y ~ I(0.018816*(x^(3.070236))), se = FALSE)+
   theme(axis.text.x = element_text(hjust = 0.5))+
-  ggtitle("LWR of Fresh G. oyena")+
-  xlab("SL_cm")+
-  ylab("Mass_g")
+  ggtitle("LWR of Fresh S. fuscescens")+
+  xlab("SL (cm)")+
+  ylab("Mass (g)")
 
 # Fishbase comparison ----
 length_weight("Siganus fuscescens")
@@ -73,13 +73,12 @@ ggplot()+
 # Annotated Graph ---- 
 ggplot(Siganus_fuscescens_fresh, aes(x=SL_cm, y=Mass_g))+
   geom_point(aes(fill=))+
-  geom_smooth(method = glm, formula = y ~ I(0.03144*(x^(2.81276))), se = TRUE)+
-  geom_segment(aes(x = 12, xend = 3, y = 2, yend = 2), color = "red")+
-  annotate("text" , label="y ~ 0.03144x^(2.81276)  RSE ~ 1.156", x=8, y=30)+
+  geom_smooth(method = glm, formula = y ~ I(0.018816*(x^(3.070236))), se = TRUE)+
+  annotate("text" , label="y ~ 0.018816x^(3.070236)  RSE ~ 0.6645", x=8.5, y=7)+
   theme(axis.text.x = element_text(hjust = 0.5))+
   ggtitle("LWR of Fresh S. fuscescens")+
-  xlab("SL_cm")+
-  ylab("Mass_g")
+  xlab("SL (cm)")+
+  ylab("Mass (g)")
 
 # Relative condition factor 
 exp_weight <- ((a)*((xS)^(b)))
@@ -87,18 +86,22 @@ Kn <- (y)/(exp_weight)
 rcf <- data.frame(xS, Kn)
 avg_Kn <- mean(Kn)
 avg_Kn
+lmrcf <- lm(formula = Kn ~ xS, data = rcf)
+lmrcf
+summary(lmrcf)
 rKn <- (exp_weight)/((a)*(xS))
 cf <- ((100)*((y)/(xS)^(3)))
 avg_cf <- mean(cf)
 avg_cf
+summary(Kn)
 
 ggplot(rcf, aes(x=xS, y=Kn))+
   geom_point(aes(fill=))+
   geom_smooth(method = lm)+
-  annotate("text" , label="Average Kn = 0.9977386", x=6.75, y=1.3)+  
+  annotate("text" , label="Average Kn = 0.9990732", x=8.5, y=1.15)+  
   theme(axis.text.x = element_text(hjust = 0.5))+
   ggtitle("Relative Condition Factor (Kn) of S. fuscescens")+
-  xlab("SL_cm")+
+  xlab("SL (cm)")+
   ylab("Kn")
 
 #Linear regression formula
@@ -121,5 +124,17 @@ ggplot(logxS_y, aes(x=logl, y=logw))+
   geom_smooth(method = lm, se = FALSE)+
   theme(axis.text.x = element_text(hjust = 0.5))+
   ggtitle("Linear Regression model of S. fuscescens")+
-  xlab("log10_SL_cm")+
-  ylab("log10_Mass_g")
+  xlab("log10 SL (cm)")+
+  ylab("log10 Mass (g)")
+
+# Z score (Outliers) ---- 
+avgxS <- mean(xS)
+sdxS <- sd(xS)
+zxS <- ((xS)-(avgxS)/(sdxS))
+avgz <- mean(zxS)
+avgz
+xSscore <- data.frame(xS, zxS)
+xSscore[xSscore$zxS <=3, ]
+xSscore
+xSnooutlier <- xSscore[xSscore$zxS <=3, ]
+xSnooutlier

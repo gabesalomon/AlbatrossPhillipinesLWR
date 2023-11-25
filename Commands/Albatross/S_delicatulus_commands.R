@@ -17,7 +17,7 @@ library(nls2)
 library(patchwork)
 
 # S. delicatulus Dataset ----
-Spratelloides_delicatulus <- read_excel("AlbatrossPhillipinesLWR/Data/Albatross_LWR_data/Spratelloides_delicatulus.xlsx")
+Spratelloides_delicatulus <- read_excel("AlbatrossPhillipinesLWR/Data/Albatross_LWR_data/Albatross_LWR_data.xlsx",8)
 View(Spratelloides_delicatulus)
 summary(Spratelloides_delicatulus)
 y <- c(Spratelloides_delicatulus$Mass_g)
@@ -44,8 +44,8 @@ ggplot(Spratelloides_delicatulus, aes(x=SL_cm, y=Mass_g))+
   geom_smooth(method = glm, formula = y ~ I(0.007912*(x^(3.154975))), se = TRUE)+
   theme(axis.text.x = element_text(hjust = 0.5))+
   ggtitle("LWR of S. delicatulus")+
-  xlab("SL_cm")+
-  ylab("Mass_g")
+  xlab("SL (cm)")+
+  ylab("Mass (g)")
 
 # Fishbase comparison ----
 length_weight("Spratelloides delicatulus")
@@ -68,28 +68,33 @@ ggplot()+
   xlab("b")+
   ylab("log10a")
   
-  # Annotated Graph ---- 
+# Fishbase Genus comparison ---
+log10ab <- read_excel("AlbatrossPhillipinesLWR/Data/Albatross_LWR_data/loga_b_genus_comparison.xlsx",1)
+log10ab_after <- na.omit(log10ab)
+View(log10ab_after)
+
+coll_log_a <- log10(a)
+collected1 <- data.frame(b, coll_log_a)
+
+ggplot(data = log10ab_after, aes(x=log10ab_after$b, y=log10ab_after$log10a, color=Species))+
+  geom_point()+
+  geom_point(collected1, mapping=aes(x=b, y=coll_log_a), color="red")+
+  geom_smooth(log10ab_after, method = lm, mapping=aes(x=log10ab_after$b, y=log10ab_after$log10a), se = FALSE, color="blue")+
+  theme(axis.text.x = element_text(hjust = 0.5))+
+  scale_color_discrete(log10ab_after$Species)+
+  ggtitle("Length-Weight log10a vs b Comparison of the genus Spratelloides")+
+  xlab("b")+
+  ylab("log10a")
+
+# Annotated Graph ---- 
 ggplot(Spratelloides_delicatulus, aes(x=SL_cm, y=Mass_g))+
   geom_point(aes(fill=))+
   geom_smooth(method = glm, formula = y ~ I(0.007912*(x^(3.154975))), se = TRUE)+
-  geom_segment(aes(x = 6.4, xend = 1.6, y = 2, yend = 2), color = "red")+
-  annotate("text" , label="y ~ 0.007912x^(3.154975)  RSE ~ 0.1009", x=3.5, y=1.5)+
+  annotate("text" , label="y ~ 0.0079x^(3.15)  R2 ~ 0.989", x=5, y=0.25)+
   theme(axis.text.x = element_text(hjust = 0.5))+
   ggtitle("LWR of S. delicatulus")+
-  xlab("SL_cm")+
-  ylab("Mass_g")
-
- # Incomplete R2
-compdata <- data.frame(xS, y)
-rsq = c(log(y) ~ deriv(0.007912) + (3.154975(log(xS))), data = compdata)
-summary(rsq)
-
-ggplot(rsq, aes(x=data.xS, y=data.y))+
-  geom_point(aes(fill=))+
-  theme(axis.text.x = element_text(hjust = 0.5))+
-  ggtitle("LWR of S. delicatulus")+
-  xlab("SL_cm")+
-  ylab("Mass_g")
+  xlab("SL (cm)")+
+  ylab("Mass (g)")
 
 # Relative condition factor 
 exp_weight <- ((a)*((xS)^(b)))
@@ -97,18 +102,22 @@ Kn <- (y)/(exp_weight)
 rcf <- data.frame(xS, Kn)
 avg_Kn <- mean(Kn)
 avg_Kn
+lmrcf <- lm(formula = Kn ~ xS, data = rcf)
+lmrcf
+summary(lmrcf)
 rKn <- (exp_weight)/((a)*(xS))
 cf <- ((100)*((y)/(xS)^(3)))
 avg_cf <- mean(cf)
 avg_cf
+summary(Kn)
 
 ggplot(rcf, aes(x=xS, y=Kn))+
   geom_point(aes(fill=))+
   geom_smooth(method = lm)+
-  annotate("text" , label="Average Kn = 0.9733541", x=2.75, y=1.2)+  
+  annotate("text" , label="Average Kn = 0.9734, R2 = 0.1443", x=2.75, y=1.2)+  
   theme(axis.text.x = element_text(hjust = 0.5))+
   ggtitle("Relative Condition Factor (Kn) of S. delicatulus")+
-  xlab("SL_cm")+
+  xlab("SL (cm)")+
   ylab("Kn")
 
 #Linear regression formula
@@ -131,5 +140,44 @@ ggplot(logxS_y, aes(x=logl, y=logw))+
   geom_smooth(method = lm, se = FALSE)+
   theme(axis.text.x = element_text(hjust = 0.5))+
   ggtitle("Linear Regression model of S. delicatulus")+
-  xlab("log10_SL_cm")+
-  ylab("log10_Mass_g")
+  xlab("log10 SL (cm)")+
+  ylab("log10 Mass (g)")
+
+# Z score (Outliers) ---- 
+avgxS <- mean(xS)
+sdxS <- sd(xS)
+zxS <- ((xS)-(avgxS)/(sdxS))
+avgz <- mean(zxS)
+avgz
+xSscore <- data.frame(xS, zxS)
+xSscore[xSscore$zxS <=3, ]
+xSscore
+xSnooutlier <- xSscore[xSscore$zxS <=3, ]
+xSnooutlier
+
+# Fishbase comparison genus----
+library(rfishbase)
+genus_name <- "Spratelloides"
+spratelloides_species <- species(genus = genus_name)
+length_weight_data <- spratelloides_species[, c("Species", "LWLength", "LWWeight")]
+summary(length_weight_data)
+
+length_weight("Spratelloides")
+fb_a <- c(length_weight("Spratelloides"))
+compar1 <- data.frame(var0 = c(a,b), var1 = c(fb_a$a,fb_a$b))
+
+log_a <- log10(fb_a$a)
+data.frame(fb_a$b, log_a)
+comp2 <- data.frame(fb_a$b, log_a)
+
+coll_log_a <- log10(a)
+collected1 <- data.frame(b, coll_log_a)
+
+ggplot()+
+  geom_point(comp2, mapping=aes(x=fb_a.b, y=log_a))+
+  geom_point(collected1, mapping=aes(x=b, y=coll_log_a), color="red")+
+  geom_smooth(comp2, method = lm, mapping=aes(x=fb_a.b, y=log_a), se = FALSE, color="blue")+
+  theme(axis.text.x = element_text(hjust = 0.5))+
+  ggtitle("Length-Weight log10a vs b of S. delicatulus")+
+  xlab("b")+
+  ylab("log10a")
