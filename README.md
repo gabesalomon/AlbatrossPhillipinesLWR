@@ -6,8 +6,7 @@
 ### Purpose 
 
 ----
-
-To examine the effect ethanol preservation shrinkage has on reported length-weight relationship and condition factor, and to establish a correction factor for each species.
+To report the length-weight relationship of select specimens collected during the USS Albatross' expedition to the Phillipines from 1907-1910, as well as a discussion on the effect ethanol preservation shrinkage has on reported length-weight relationship and condition factor, and to establish a correction factor for species certain species using fresh caught length and weight data.
 
 <br>
 
@@ -29,7 +28,7 @@ The portion of the _Albatross_ Phillipine exedition collection sampled from was 
  
  Le Cren's Relative Condition Factor K_n = W/aL^n - for comparison to the average weight
  
- Goal of project in R is to produce graphs of these three formulas and to compare the resulting _a_ and _b_ values to those from fresh studies found in the rfishbase database using log10a and b.
+ Goal of project in R is to produce graphs of these three formulas, and to compare the resulting _a_ and _b_ values to those from fresh studies found in the rfishbase database using log10a and b.
 
  <br>
 
