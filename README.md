@@ -14,11 +14,11 @@ To report the length-weight relationship of select specimens collected during th
 
 ----
 
-Individual specimens were taken out of solution, with the mouth and gill cavities drained before being dried using Kimtech wipes. Individuals who had their abdominal cavities cut were drained and gently squeezed to remove excess ethanol. The standard and total lengths (mm) were measured using mechanical calipers. The mass (g) was measured using an analytical balance. Individuals were then returned to their respective lot jars and topped off with 75% EtOH if necessary. This process was kept consistently within 1-3 minutes, during which time ethanol also evaporated. For individuals with tags, the original string was cut in placed back in the lot jar, while the tag was retied using clear fishing wire after measurements were taken.
+Individual specimens were taken out of solution, with the mouth and gill cavities drained before being dried using Kimtech wipes. Individuals who had their abdominal cavities cut were drained and gently squeezed to remove excess ethanol. The standard and total lengths (mm) were measured using mechanical calipers. The mass (g) was measured using an analytical balance. Individuals were then returned to their respective lot jars and topped off with 75% EtOH if necessary. This process was kept consistently within 1-3 minutes, during which time additional ethanol also evaporated. For individuals with tags, the original string was cut and placed back in the lot jar, while the tag was re-tied using nylon fishing wire after measurements were taken.
 
 <br>
 
-The portion of the _Albatross_ Phillipine exedition collection sampled from was that which was available to me in the Carpenter Molecular Systematics lab (ODU) as of March 2023. The selection of species in the lab were what was being tageted by the Phillipines PIRE project. Species were selected based on the availability of reported fresh-caught length-weight relationship (LWR) from within the Phillipine archipelago.
+The portion of the Albatross Philippine expedition collection sampled from was that which was available to me in the Carpenter Molecular Systematics lab (ODU) as of March 2023. The selection of species in the lab were what was being targeted by the Philippines PIRE project. Species were selected based on the availability of reported fresh-caught length-weight relationship (LWR) from within the Philippine archipelago.
 
 <Br>
  
