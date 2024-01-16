@@ -50,7 +50,7 @@ Contains the R code that produces figures for each species. Running commands in 
 
 Contains figures for each species for which Albatross LWR data was collected. 
 
-Figures are now hosted on Dropbox at the following link: https://www.dropbox.com/scl/fo/zetfmdywvj3x422vsool7/h?rlkey=ilq9cmqtmr7y6wclf7qvycdrp&dl=0
+Figures are now hosted on Dropbox at the following link: https://www.dropbox.com/scl/fo/zetfmdywvj3x422vsool7/h?rlkey=djv53292zs129rj66s5d9s8t4&dl=0
 
 
 
