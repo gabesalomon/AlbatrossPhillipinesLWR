@@ -1,0 +1,47 @@
+Albatross Length Weight Project
+Meeting w/ Gabriel Salomon
+Date: 1/22/24
+
+Questions for Abner
+Where were the fresh samples collected? City? Market? Fishermen?
+Are they still at SUML? What are their preservation conditions?
+Anything about the Spratelloides collections? Bc R-squared (for log10a vs b) values are ~0.70
+
+
+Goal/purpose of the project?
+
+
+Specific questions
+What is the long-term viability of ethanol solutions for studying morphological characteristics such as LWR?
+
+What is the LWR for contemporary Philippine species (data deficient).
+What is the LWR for historical Philippine species (data deficient).
+What is the change in the LWR of contemporary species after 1 month of preservation?
+Does this 1-month preservation LWR better represent the historical LWR than the fresh LWR? 
+
+
+I put the questions first, but the most important thing I wanted to talk to you about is my decision to only remeasure the fish after one month. I’d like to talk to you about it in person, but I tried to explain it a little below.
+
+1.	Sigfigs? Going with 4 right now but fishbase has 3
+2.	For the loga_b comparison figures, should we include a New Caledonian study (https://www.documentation.ird.fr/hor/fdi:25602 Pages 132-134) with questionable a and b on fishbase? This study has length-weight data split up into M/F/juvenile/larval, but fishbase has a single data point and I can’t figure out how they got this from the 4 relationships in the paper. The paper is also in French, so for me it is difficult to interpret. I’ve included this study for now but I’m considering removing it.
+https://fishbase.se/popdyn/LWRelationshipList.php?ID=1457&GenusName=Spratelloides&SpeciesName=delicatulus&fc=741
+3.	The fresh Sde and Sgr have low R2 of .7234 and .72 respectively. Can you think of an explanation for why it’s so much lower than the other species?
+4.	Do you know what kind of fishing gear/ locality the fresh species are from? That one would be more for me to ask Abner, but I feel like it could be useful info for understanding why these species are so all over the place.
+5.	I am not sure if some of the collections of species that I’ve selected are too small to collect useful length and weight data on. They are all definitely on the smaller side of their possible ranges but I have kind of just ignored that up until this point for the sake of just collecting as much data as I could. Would you be able to review the min and max lengths for some of the larger species I selected?
+
+These next two aren’t really questions, but I feel like I was not thorough enough in my research with what to do with the data we got back from the Philippines before the data was collected and I realize now that the fresh fish portion is poorly designed. The first is the most major:
+
+1.	I made a mistake in only asking for measurements to be taken at the 1 month mark, rather than being repeated for multiple months after. At the time, I was working off of one main article that I had used to support this idea (https://www.researchgate.net/publication/233439592_Shrinkage_of_Inland_Silverside_Larvae_Preserved_in_Ethanol_and_Formalin) but I failed to take into consideration that the study was working with larval specimens and not fully grown fish. Since then I have found other papers that have studied the shrink rate of adult fish of various species that found that weight shrinkage continues on for months afterwards. I don’t know why I didn’t think of this at the time, I just didn’t consider what to do with the data thoroughly enough.
+2.	According to what I can tell from the history paper about the Albatross expedition (https://sites.wp.odu.edu/PIRE/wp-content/uploads/sites/757/2019/02/Smith-and-Williams-1999-albatross-philippine-expedition.pdf  Page 34), the method of preservation they used was to dilute ethanol with seawater and preserve the fish quickly after catch. Because the data collected in the Philippines, it is likely that these fish were either preserved on ice. This difference would also likely have an effect on the amount of water lost/shrink undergone before being preserved in ethanol.
+
+Essentially, I feel like there are too many caveats with the fresh data for its comparison to the Albatross collection to be really useful. In my powerpoint presentation, I’ve included loga vs b comparison figures that show the change from fresh to 1 month. I think that is still a useful visualization of the effect ethanol has on LWR, but in order for the shrink comparisons between fresh and museum collections to have really been meaningful, the study would have needed to be longer. 
+
+Besides all of that, these are the things I’m working on currently or still need to do:
+●	Color-coding condition factor by locality
+●	Removing articles considered “doubtful” by fishbase from the loga_b graphs. I’ve been struggling to figure out how to do it within R, so the next easiest thing is to avoid the rfishbase package and just do it in excel.
+●	Currently the line of best fit in the loga_b graphs only covers the studies from fishbase. I’ve been struggling with getting R to create one for both the data I generated and the data from fishbase, but the easiest answer is also to just use excel instead. 
+●	Discussion for the fresh collections and their comparison to Albatross (dependent of if the data is useful)
+
+
+Check ML, length at maturity, for each species for life stage. What is the cutoff for maturity? Juveniles, subadults, adults.
+Check Length at maturity for each species
