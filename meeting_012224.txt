@@ -45,3 +45,7 @@ Besides all of that, these are the things I’m working on currently or still ne
 
 Check ML, length at maturity, for each species for life stage. What is the cutoff for maturity? Juveniles, subadults, adults.
 Check Length at maturity for each species
+
+
+To Do
+Create README.md files for each directory
