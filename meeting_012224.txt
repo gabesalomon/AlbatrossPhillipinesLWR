@@ -20,10 +20,10 @@ What is the change in the LWR of contemporary species after 1 month of preservat
 Does this 1-month preservation LWR better represent the historical LWR than the fresh LWR? 
 
 
-I put the questions first, but the most important thing I wanted to talk to you about is my decision to only remeasure the fish after one month. I’d like to talk to you about it in person, but I tried to explain it a little below.
+An important note is that fish were only remeasured after one month. Below are some notes about this:
 
-1.	Sigfigs? Going with 4 right now but fishbase has 3
-2.	For the loga_b comparison figures, should we include a New Caledonian study (https://www.documentation.ird.fr/hor/fdi:25602 Pages 132-134) with questionable a and b on fishbase? This study has length-weight data split up into M/F/juvenile/larval, but fishbase has a single data point and I can’t figure out how they got this from the 4 relationships in the paper. The paper is also in French, so for me it is difficult to interpret. I’ve included this study for now but I’m considering removing it.
+1.	Sigfigs? Going with 4 right now but fishbase has 3. Use the same as fishbase.
+2.	For the loga_b comparison figures, should we include a New Caledonian study (https://www.documentation.ird.fr/hor/fdi:25602 Pages 132-134) with questionable a and b on fishbase? This study has length-weight data split up into M/F/juvenile/larval, but fishbase has a single data point and I can’t figure out how they got this from the 4 relationships in the paper. The paper is also in French, so for me it is difficult to interpret. I’ve included this study for now but I’m considering removing it. Keep it. 
 https://fishbase.se/popdyn/LWRelationshipList.php?ID=1457&GenusName=Spratelloides&SpeciesName=delicatulus&fc=741
 3.	The fresh Sde and Sgr have low R2 of .7234 and .72 respectively. Can you think of an explanation for why it’s so much lower than the other species?
 4.	Do you know what kind of fishing gear/ locality the fresh species are from? That one would be more for me to ask Abner, but I feel like it could be useful info for understanding why these species are so all over the place.
