@@ -48,6 +48,25 @@ ggplot(Spratelloides_gracilis, aes(x=SL_cm, y=Mass_g))+
   ylab("Mass_g")
 
 # Fishbase comparison ----
+logab <- read_excel("AlbatrossPhillipinesLWR/Data/Albatross_LWR_data/loga_b_fishbase_comparison.xlsx",7)
+logab_after <- na.omit(logab)
+View(logab_after)
+
+coll_log_a <- log10(a)
+collected1 <- data.frame(b, coll_log_a)
+
+ggplot(data = logab_after, aes(x=logab_after$b, y=logab_after$log10a, color=Locality))+
+  geom_point()+
+  geom_point(collected1, mapping=aes(x=b, y=coll_log_a), color="red")+
+  geom_smooth(logab_after, method = lm, mapping=aes(x=logab_after$b, y=logab_after$log10a), se = FALSE, color="blue")+
+  theme(axis.text.x = element_text(hjust = 0.5))+
+  scale_color_discrete(logab_after$Locality)+
+  guides(colour=guide_legend(title = "Locality"))+
+  ggtitle("Length-Weight log10a vs b of Spratelloides gracilis")+
+  xlab("b")+
+  ylab("log10a")
+
+# Original Fishbase comparison ---
 length_weight("Spratelloides gracilis")
 fb_a <- c(length_weight("Spratelloides gracilis"))
 compar1 <- data.frame(var0 = c(a,b), var1 = c(fb_a$a,fb_a$b))
@@ -73,7 +92,6 @@ ggplot()+
 ggplot(Spratelloides_gracilis, aes(x=SL_cm, y=Mass_g))+
   geom_point(aes(fill=))+
   geom_smooth(method = glm, formula = y ~ I(0.0059858*(x^(3.1470502))), se = TRUE)+
-  geom_segment(aes(x = 10, xend = 3, y = 2, yend = 2), color = "red")+
   annotate("text" , label="y ~ 0.0059858x^(3.1470502)  RSE ~ 0.06427", x=3.5, y=1.5)+
   theme(axis.text.x = element_text(hjust = 0.5))+
   ggtitle("LWR of S. gracilis")+

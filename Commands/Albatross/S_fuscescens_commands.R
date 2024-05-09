@@ -48,6 +48,25 @@ ggplot(Siganus_fuscescens, aes(x=SL_cm, y=Mass_g))+
   ylab("Mass (g)")
 
 # Fishbase comparison ----
+logab <- read_excel("AlbatrossPhillipinesLWR/Data/Albatross_LWR_data/loga_b_fishbase_comparison.xlsx",1)
+logab_after <- na.omit(logab)
+View(logab_after)
+
+coll_log_a <- log10(a)
+collected1 <- data.frame(b, coll_log_a)
+
+ggplot(data = logab_after, aes(x=logab_after$b, y=logab_after$log10a, color=Locality))+
+  geom_point()+
+  geom_point(collected1, mapping=aes(x=b, y=coll_log_a), color="red")+
+  geom_smooth(logab_after, method = lm, mapping=aes(x=logab_after$b, y=logab_after$log10a), se = FALSE, color="blue")+
+  theme(axis.text.x = element_text(hjust = 0.5))+
+  scale_color_discrete(logab_after$Locality)+
+  guides(colour=guide_legend(title = "Locality"))+
+  ggtitle("Length-Weight log10a vs b of Siganus fuscescens")+
+  xlab("b")+
+  ylab("log10a")
+
+# Original Genus comparison ---
 length_weight("Siganus fuscescens")
 fb_a <- c(length_weight("Siganus fuscescens"))
 compar1 <- data.frame(var0 = c(a,b), var1 = c(fb_a$a,fb_a$b))
@@ -74,8 +93,7 @@ ggplot()+
 ggplot(Siganus_fuscescens, aes(x=SL_cm, y=Mass_g))+
   geom_point(aes(fill=))+
   geom_smooth(method = glm, formula = y ~ I(0.018735*(x^(3.022117))), se = TRUE)+
-  geom_segment(aes(x = 20, xend = 3, y = 10, yend = 10), color = "red")+
-  annotate("text" , label="y ~ 0.018735x^(3.022117)  RSE ~ 0.212", x=15, y=4)+
+  annotate("text" , label="y ~ 0.018735x^(3.022117)  RSE ~ 0.212", x=7.5, y=90)+
   theme(axis.text.x = element_text(hjust = 0.5))+
   ggtitle("LWR of S. fuscescens")+
   xlab("SL (cm)")+
