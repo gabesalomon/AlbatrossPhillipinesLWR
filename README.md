@@ -53,5 +53,11 @@ Contains figures for each species for which Albatross LWR data was collected.
 Figures are now hosted on Dropbox at the following link: https://www.dropbox.com/scl/fo/zetfmdywvj3x422vsool7/h?rlkey=djv53292zs129rj66s5d9s8t4&dl=0
 
 
+### Draft
+
+The Google Drive directory LWR Project is in Gabriel Salomon's Google Drive. This contains relevant documents such as the working draft. 
+
+https://drive.google.com/drive/folders/1dJLTVSuzuu0zXGwYG8VY5L3kNShBu2X9?usp=drive_link
+
 
   
