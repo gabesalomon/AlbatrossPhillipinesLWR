@@ -1,3 +1,14 @@
+# readme ------------------------------------------------------------------
+
+# Created by: Gabriel Salomon
+# Last Updated by: John Whalen
+# Last Updated: 6/5/24
+
+#### set working directory ------------------------------------------------
+
+# set working directory. working directory is set to the directory that has this file. for John
+setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+
 # Libraries ( Load only libraries if not first time) ----
 install.packages("pacman")
 install.packages("rlang")
@@ -7,6 +18,7 @@ install.packages("readxl")
 install.packages("ggplot2")
 install.packages("nls2")
 install.packages("patchwork")
+install.packages("dplyr")
 library(pacman)
 library(rlang)
 library(ggpubr)
@@ -15,9 +27,16 @@ library(readxl)
 library(ggplot2)
 library(nls2)
 library(patchwork)
+library(dplyr)
 
-# S. delicatulus Dataset ----
+# Import S. delicatulus Dataset ----
+
+# for Gabriel
 Spratelloides_delicatulus <- read_excel("AlbatrossPhillipinesLWR/Data/Albatross_LWR_data/Albatross_LWR_data.xlsx",8)
+
+# for John. Uses the relative path from the Commands/Albatross/ directory where this R file is located. 
+Spratelloides_delicatulus <- read_excel("../../Data/Albatross_LWR_data/Albatross_LWR_data.xlsx", 8)
+
 View(Spratelloides_delicatulus)
 summary(Spratelloides_delicatulus)
 y <- c(Spratelloides_delicatulus$Mass_g)
@@ -33,7 +52,7 @@ sqrt(sum((xT-mean(xT))^2/(length(xT)-1)))/sqrt(length(xT))
 nls1 <- nls(y ~ afit*xS^bfit, data.frame(xS , y), start = list(afit=.5, bfit=.5))
 print(nls1)
 yfit <- coef(nls1)[1]*xS^coef(nls1)[2]
-lines(xS, yfit, col=2)
+lines(xS, yfit, col=2) #error: plot.new has not been called yet
 a <- 0.007912
 b <- 3.154975
 summary(nls1)
@@ -181,3 +200,49 @@ ggplot()+
   ggtitle("Length-Weight log10a vs b of S. delicatulus")+
   xlab("b")+
   ylab("log10a")
+
+# Site comparison ----
+
+print(unique(Spratelloides_delicatulus$Locality))
+
+# Calculate summary statistics for SL_mm & Mass_g by Locality
+summary_stats <- Spratelloides_delicatulus %>%
+  group_by(Locality) %>%
+  summarise(
+    mean_SL_mm = mean(SL_mm, na.rm = TRUE),
+    se_SL_mm = sd(SL_mm, na.rm = TRUE) / sqrt(n()),
+    mean_Mass_g = mean(Mass_g, na.rm = TRUE), 
+    se_Mass_g = sd(Mass_g, na.rm = TRUE) / sqrt(n())
+  )
+print(summary_stats)
+
+# Merge summary statistics with the original data
+Spratelloides_delicatulus <- Spratelloides_delicatulus %>%
+  left_join(summary_stats, by = "Locality")
+
+# Boxplot for SL_mm with jittered points and standard error bars
+ggplot(Spratelloides_delicatulus, aes(x = Locality, y = SL_mm)) +
+  geom_boxplot() +
+  geom_jitter(width = 0.2, alpha = 0.6) +
+  geom_errorbar(
+    aes(ymin = mean_SL_mm - se_SL_mm, ymax = mean_SL_mm + se_SL_mm), 
+    width = 0.2, 
+    color = "blue"
+  ) +
+  labs(title = "Standard Length by Locality with Jittered Points and SE Bars", 
+       x = "Locality", y = "Standard Length (mm)") +
+  theme_minimal()
+
+# Boxplot for Mass_g with jittered points and standard error bars
+
+ggplot(Spratelloides_delicatulus, aes(x = Locality, y = Mass_g)) +
+  geom_boxplot() +
+  geom_jitter(width = 0.2, alpha = 0.6) +
+  geom_errorbar(
+    aes(ymin = mean_Mass_g - se_Mass_g, ymax = mean_Mass_g + se_Mass_g), 
+    width = 0.2, 
+    color = "blue"
+  ) +
+  labs(title = "Mass by Locality with Jittered Points and SE Bars", 
+       x = "Locality", y = "Mass (g)") +
+  theme_minimal()
