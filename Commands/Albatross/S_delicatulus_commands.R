@@ -57,7 +57,7 @@ sqrt(sum((y-mean(y))^2/(length(y)-1)))/sqrt(length(y))
 sqrt(sum((xS-mean(xS))^2/(length(xS)-1)))/sqrt(length(xS))
 sqrt(sum((xT-mean(xT))^2/(length(xT)-1)))/sqrt(length(xT))
 
-# add coordinates to sites in the dataframe Spratelloides_delicatulus
+# add coordinates to sites in the dataframe Spratelloides_delicatulus ----
 # Create a data frame with Locality, Latitude, and Longitude
 locality_coords <- data.frame(
   Locality = c("Cagayan_de_Jolo", "Jamelo_Cove_Luzon", "Mansalay_Mindoro", "Sacol_Island_Zamboanga"),
@@ -74,7 +74,7 @@ Spratelloides_delicatulus <- merge(Spratelloides_delicatulus, locality_coords, b
 # Print the updated Spratelloides_delicatulus data frame
 head(Spratelloides_delicatulus)
 
-# Desired eq.: Mass_g = a*SL_cm^b (SL) ----
+# Desired eq.: Mass_g = a*SL_cm^b (SL). Calculating constants a and b from sampled data? ----
 nls1 <- nls(y ~ afit*xS^bfit, data.frame(xS , y), start = list(afit=.5, bfit=.5))
 print(nls1)
 yfit <- coef(nls1)[1]*xS^coef(nls1)[2]
@@ -148,14 +148,14 @@ ggplot(Spratelloides_delicatulus, aes(x=SL_cm, y=Mass_g))+
 
 # Relative condition factor 
 exp_weight <- ((a)*((xS)^(b)))
-Kn <- (y)/(exp_weight)
+Kn <- (y)/(exp_weight) # Le Cren's Relative Condition Factor
 rcf <- data.frame(xS, Kn)
 avg_Kn <- mean(Kn)
 avg_Kn
 lmrcf <- lm(formula = Kn ~ xS, data = rcf)
 lmrcf
 summary(lmrcf)
-rKn <- (exp_weight)/((a)*(xS))
+rKn <- (exp_weight)/((a)*(xS)) # I'm not sure this makes sense
 cf <- ((100)*((y)/(xS)^(3)))
 avg_cf <- mean(cf)
 avg_cf
