@@ -1,8 +1,8 @@
-# readme ------------------------------------------------------------------
+#### readme ------------------------------------------------------------------
 
 # Created by: Gabriel Salomon
 # Last Updated by: John Whalen
-# Last Updated: 6/5/24
+# Last Updated: 6/8/24
 
 #### set working directory ------------------------------------------------
 
@@ -194,15 +194,6 @@ ggplot(Spratelloides_delicatulus, aes(x=SL_cm, y=Kn))+
   xlab("SL (cm)")+
   ylab("Kn")
 
-# Relative Condition Factor (Kn) of S. delicatulus by locality.
-ggplot(Spratelloides_delicatulus, aes(x=SL_cm, y=Kn, color = Locality))+
-  geom_point(aes(fill=))+
-  geom_smooth(method = lm)+
-  theme(axis.text.x = element_text(hjust = 0.5))+
-  ggtitle("Relative Condition Factor (Kn) of S. delicatulus by Locality")+
-  xlab("SL (cm)")+
-  ylab("Kn")
-
 # Le Cren's Relative Condition Factor (Kn) of S. delicatulus by locality.
 ggplot(Spratelloides_delicatulus, aes(x=SL_cm, y=Kn, color = Locality))+
   geom_point(aes(fill=))+
@@ -241,8 +232,6 @@ formula_rg
 # Calculate log-transformed values for Mass_g and SL_cm
 Spratelloides_delicatulus$log_Mass_g <- log10(Spratelloides_delicatulus$Mass_g)
 Spratelloides_delicatulus$log_SL_cm <- log10(Spratelloides_delicatulus$SL_cm)
-
-
 
 
 ggplot(logxS_y, aes(x=logl, y=logw))+

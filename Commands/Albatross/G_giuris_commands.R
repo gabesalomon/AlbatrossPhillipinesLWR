@@ -1,23 +1,48 @@
-# Libraries ( Load only libraries if not first time) ----
-install.packages("pacman")
-install.packages("rlang")
-install.packages("ggpubr")
-install.packages("rfishbase")
-install.packages("readxl")
-install.packages("ggplot2")
-install.packages("nls2")
-install.packages("patchwork")
-library(pacman)
-library(rlang)
-library(ggpubr)
-library(rfishbase)
-library(readxl)
-library(ggplot2)
-library(nls2)
-library(patchwork)
+#### readme ------------------------------------------------------------------
 
-# G. giuris Dataset ----
+# Created by: Gabriel Salomon
+# Last Updated by: John Whalen
+# Last Updated: 6/8/24
+
+#### INITIALIZE ####
+
+# for John
+setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+
+#### PACKAGES ####
+packages_used <- 
+  c("pacman",
+    "rlang",
+    "ggpubr",
+    "rfishbase",
+    "readxl",
+    "ggplot2",
+    "nls2",
+    "patchwork",
+    "dunn.test",
+    "ggsignif",
+    "maps",
+    "dplyr",
+    "car")
+
+packages_to_install <- 
+  packages_used[!packages_used %in% installed.packages()[,1]]
+
+if (length(packages_to_install) > 0) {
+  install.packages(packages_to_install, 
+                   Ncpus = Sys.getenv("NUMBER_OF_PROCESSORS") - 1)
+}
+
+lapply(packages_used, 
+       require, 
+       character.only = TRUE)
+
+# for John. Uses the relative path from the Commands/Albatross/ directory where this R file is located. 
+Glossogobius_giuris <- read_excel("../../Data/Albatross_LWR_data/Albatross_LWR_data.xlsx", 3)
+
+# for Gabe. G. giuris Dataset ----
 Glossogobius_giuris <- read_excel("AlbatrossPhillipinesLWR/Data/Albatross_LWR_data/Albatross_LWR_data.xlsx",3)
+
 View(Glossogobius_giuris)
 summary(Glossogobius_giuris)
 y <- c(Glossogobius_giuris$Mass_g)
@@ -28,6 +53,20 @@ xT <- c(Glossogobius_giuris$TL_cm)
 sqrt(sum((y-mean(y))^2/(length(y)-1)))/sqrt(length(y))
 sqrt(sum((xS-mean(xS))^2/(length(xS)-1)))/sqrt(length(xS))
 sqrt(sum((xT-mean(xT))^2/(length(xT)-1)))/sqrt(length(xT))
+
+# add coordinates to sites in the dataframe Atherinomorus_endrachtensis ----
+# Create a data frame with Locality, Latitude, and Longitude
+locality_coords <- data.frame(
+  Locality = c("Naujan_Mindoro", "Port_Caltom_Busuanga", "Nakoda_Bay_Palawan"),
+  lat = c(13.335, 12.18582, 9.29111),
+  lon = c(121.31333, 120.10223, 117.95805)
+)
+
+# Locality Coordinates
+# Naujan_Mindoro: 13.335, 121.31333
+# Port_Caltom_Busuanga: 12.18582, 120.10223
+# Nakoda_Bay_Palawan: 9.29111, 117.95805
+
 
 # Desired eq.: Mass_g = a*SL_cm^b (SL) ----
 nls1 <- nls(y ~ afit*xS^bfit, data.frame(xS , y), start = list(afit=1, bfit=1))
