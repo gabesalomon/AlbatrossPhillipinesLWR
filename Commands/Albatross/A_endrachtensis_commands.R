@@ -2,7 +2,7 @@
 
 # Created by: Gabriel Salomon
 # Last Updated by: John Whalen
-# Last Updated: 6/8/24
+# Last Updated: 6/10/24
 
 #### INITIALIZE ####
 
@@ -54,7 +54,7 @@ sqrt(sum((y-mean(y))^2/(length(y)-1)))/sqrt(length(y))
 sqrt(sum((xS-mean(xS))^2/(length(xS)-1)))/sqrt(length(xS))
 sqrt(sum((xT-mean(xT))^2/(length(xT)-1)))/sqrt(length(xT))
 
-# add coordinates to sites in the dataframe Atherinomorus_endrachtensis ----
+#### add coordinates to sites in the dataframe Atherinomorus_endrachtensis ----
 # Create a data frame with Locality, Latitude, and Longitude
 locality_coords <- data.frame(
   Locality = c("Luzon_Port_San_Vicente", "Busin_Harbor_Burias_Island", "Malcochin_Harbor_Linapacan"),
@@ -240,7 +240,7 @@ xSnooutlier <- xSscore[xSscore$zxS <=3, ]
 xSnooutlier
 
 
-# Site comparison ----
+#### Site comparison ----
 
 print(unique(Atherinomorus_endrachtensis$Locality))
 

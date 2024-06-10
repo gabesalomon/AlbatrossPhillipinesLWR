@@ -1,24 +1,53 @@
-# Libraries ( Load only libraries if not first time) ----
-install.packages("pacman")
-install.packages("rlang")
-install.packages("ggpubr")
-install.packages("rfishbase")
-install.packages("readxl")
-install.packages("ggplot2")
-install.packages("nls2")
-install.packages("patchwork")
-library(pacman)
-library(rlang)
-library(ggpubr)
-library(rfishbase)
-library(readxl)
-library(ggplot2)
-library(nls2)
-library(patchwork)
+#### README ------------------------------------------------------------------
+  
+  # Created by: Gabriel Salomon
+  # Last Updated by: John Whalen
+  # Last Updated: 6/10/24
+  
+#### INITIALIZE ####
 
-# S. delicatulus Dataset ----
+# for John
+setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+
+#### PACKAGES ####
+packages_used <- 
+  c("pacman",
+    "rlang",
+    "ggpubr",
+    "rfishbase",
+    "readxl",
+    "ggplot2",
+    "nls2",
+    "patchwork",
+    "dunn.test",
+    "ggsignif",
+    "maps",
+    "dplyr",
+    "car")
+
+packages_to_install <- 
+  packages_used[!packages_used %in% installed.packages()[,1]]
+
+if (length(packages_to_install) > 0) {
+  install.packages(packages_to_install, 
+                   Ncpus = Sys.getenv("NUMBER_OF_PROCESSORS") - 1)
+}
+
+lapply(packages_used, 
+       require, 
+       character.only = TRUE)
+
+#### Read in data
+
+# for John. Uses the relative path from the Commands/Albatross/ directory where this R file is located. 
+S_delicatulus_onemonth <- read_excel("../../Data/One_month_LWR_data/One_month_LWR_data.xlsx",3)
+
+# for Gabe. S. delicatulus Dataset ----
 S_delicatulus_onemonth <- read_excel("AlbatrossPhillipinesLWR/Data/One_month_LWR_data/One_month_LWR_data.xlsx",3)
-S_delicatulus_after <- na.omit(S_delicatulus_onemonth)
+
+
+S_delicatulus_after <- na.omit(S_delicatulus_onemonth) #! S_delicatulus_after is a blank dataframe that has omitted everything from the dataframe S_delicatulus_onemonth
+
 View(S_delicatulus_after)
 summary(S_delicatulus_after)
 y <- c(S_delicatulus_after$Mass_g)
