@@ -60,9 +60,9 @@ sqrt(sum((xT-mean(xT))^2/(length(xT)-1)))/sqrt(length(xT))
 print(unique(Siganus_fuscescens$Locality))
 
 # Locality Coordinates
-# Mindinao_River_Cotabato_Mindanao: 7.27337, 124.1982
+# Mindanao_River_Cotabato_Mindanao: 7.27337, 124.1982
 # Pandanon_Island_between_Cebu_and_Bohol: 10.17966, 124.09
-# Surigao_Mindinao: 9.80115, 125.48876
+# Surigao_Mindanao: 9.80115, 125.48876
 # Guijulugan_Negros: 10.14337, 123.28466
 # Mactan_Island_Cebu: 10.17966, 124.09
 # Cebu_Market: 10.17966, 124.09
@@ -80,7 +80,7 @@ print(unique(Siganus_fuscescens$Locality))
 
 # Create a data frame with Locality, Latitude, and Longitude.
 locality_coords <- data.frame(
-  Locality = c("Mindinao_River_Cotabato_Mindanao", "Cebu_Strait", "Surigao_Mindinao", "Guijulugan_Negros"),
+  Locality = c("Mindanao_River_Cotabato_Mindanao", "Cebu_Strait", "Surigao_Mindanao", "Guijulugan_Negros"),
   lat = c(7.27337, 10.17966, 9.80115, 10.14337),
   lon = c(124.1982, 124.09, 125.48876, 123.28466)
 )
@@ -98,7 +98,7 @@ head(Siganus_fuscescens)
 nls1 <- nls(y ~ afit*xS^bfit, data.frame(xS , y), start = list(afit=1, bfit=1))
 print(nls1)
 yfit <- coef(nls1)[1]*xS^coef(nls1)[2]
-lines(xS, yfit, col=2)
+lines(xS, yfit, col=2) #error: plot.new has not been called yet
 a <- 0.018735
 b <- 3.022117
 summary(nls1)
@@ -205,12 +205,28 @@ locality_counts <- Siganus_fuscescens %>%
 # Print the counts
 print(locality_counts)
 
-#### Outlier. Filter the rows where SL_cm is less than or equal to 10.
+#### Remove Guijulugan_Negros because it only has 3 individuals. ####
+# Filter the rows where Locality is not equal to 'Guijulugan_Negros'
+Siganus_fuscescens <- Siganus_fuscescens %>%
+  filter(Locality != "Guijulugan_Negros")
+
+# Print the first few rows of the filtered dataframe to verify
+print(head(Siganus_fuscescens))
+
+
+#### Remove Outliers. Filter the rows where SL_cm is less than or equal to 10.
 Siganus_fuscescens <- Siganus_fuscescens %>%
   filter(SL_cm <= 10)
 
 # Print the first few rows of the filtered dataframe to verify
 print(head(Siganus_fuscescens))
+
+#### Sample size for each Locality after filtering ####
+locality_counts <- Siganus_fuscescens %>%
+  count(Locality, name = "Sample_Size")
+
+# Print the counts
+print(locality_counts)
 
 
 # Relative Condition Factor (Kn) of S. fuscescens. 
@@ -251,7 +267,7 @@ ggplot(Siganus_fuscescens, aes(x=SL_cm, y=cf, color = Locality))+
   xlab("SL (cm)")+
   ylab("cf")
 
-
+#! description needed
 ggplot(rcf, aes(x=xS, y=Kn))+
   geom_point(aes(fill=))+
   geom_smooth(method = lm)+
@@ -302,14 +318,13 @@ xSscore
 xSnooutlier <- xSscore[xSscore$zxS <=3, ]
 xSnooutlier
 
-#### Edit Below ####
 
 #### Site comparison ----
 
-print(unique(Gerres_oyena$Locality))
+print(unique(Siganus_fuscescens$Locality))
 
 # Calculate summary statistics for SL_cm & Mass_g by Locality
-summary_stats <- Gerres_oyena %>%
+summary_stats <- Siganus_fuscescens %>%
   group_by(Locality) %>%
   summarise(
     mean_SL_cm = mean(SL_cm, na.rm = TRUE),
@@ -320,11 +335,11 @@ summary_stats <- Gerres_oyena %>%
 print(summary_stats)
 
 # Merge summary statistics with the original data
-Gerres_oyena <- Gerres_oyena %>%
+Siganus_fuscescens <- Siganus_fuscescens %>%
   left_join(summary_stats, by = "Locality")
 
 # Boxplot for SL_cm with jittered points and standard error bars
-ggplot(Gerres_oyena, aes(x = Locality, y = SL_cm)) +
+ggplot(Siganus_fuscescens, aes(x = Locality, y = SL_cm)) +
   geom_boxplot() +
   geom_jitter(width = 0.2, alpha = 0.6) +
   geom_errorbar(
@@ -338,7 +353,7 @@ ggplot(Gerres_oyena, aes(x = Locality, y = SL_cm)) +
 
 # Boxplot for Mass_g with jittered points and standard error bars
 
-ggplot(Gerres_oyena, aes(x = Locality, y = Mass_g)) +
+ggplot(Siganus_fuscescens, aes(x = Locality, y = Mass_g)) +
   geom_boxplot() +
   geom_jitter(width = 0.2, alpha = 0.6) +
   geom_errorbar(
@@ -354,28 +369,39 @@ ggplot(Gerres_oyena, aes(x = Locality, y = Mass_g)) +
 #### Statistical Tests for significant differences of cf by Locality ----
 
 # Boxplot for cf to visualize data
-ggplot(Gerres_oyena, aes(x = Locality, y = cf, fill = Locality)) +
+ggplot(Siganus_fuscescens, aes(x = Locality, y = cf, fill = Locality)) +
   geom_boxplot() +
   labs(title = "Fulton's Condition Factor (cf) by Locality", x = "Locality", y = "cf") +
   theme_minimal()
 
 # Check normality using Shapiro-Wilk test
-shapiro.test(Gerres_oyena$cf)
-# p-value = 0.7944 (> 0.05), so the data do not violate the assumption of a normal distribution
+shapiro.test(Siganus_fuscescens$cf)
+# p-value = 0.2365 (> 0.05), so the data do not violate the assumption of a normal distribution
 
 # Check homogeneity of variances using Levene's Test
-leveneTest(cf ~ Locality, data = Gerres_oyena)
-# p-value = 0.1.421 (> 0.05), so the data do not violate the assumption of homogeneity
+leveneTest(cf ~ Locality, data = Siganus_fuscescens)
+# p-value = 0.327 (> 0.05), so the data do not violate the assumption of homogeneity
 # Use parametric test. Use ANOVA. 
 
 # ANOVA
-cf_anova_result <- aov(cf ~ Locality, data = Gerres_oyena)
+cf_anova_result <- aov(cf ~ Locality, data = Siganus_fuscescens)
 cf_anova_summary <- summary(cf_anova_result)
 print(cf_anova_summary)
-#p-value = 0.613 (> 0.05), so there is not a significant difference in cf among localities.
+#p-value = 4.71e-11 (< 0.05), so there is a significant difference in cf among localities. Run Tukey's HSD post-hoc test.
+
+# If significant, perform Tukey's HSD post-hoc test
+if (cf_anova_summary[[1]][["Pr(>F)"]][1] < 0.05) {
+  cf_tukey_result <- TukeyHSD(cf_anova_result)
+  print(cf_tukey_result)
+}
+# Tukey HSD Results
+# $Locality   diff          lwr        upr     p adj
+# Mindanao_River_Cotabato_Mindanao-Cebu_Strait       0.5136416  0.364885607  0.6623975 0.0000000 (significant)
+# Surigao_Mindanao-Cebu_Strait                       0.1498965 -0.002086654  0.3018796 0.0539813
+# Surigao_Mindanao-Mindanao_River_Cotabato_Mindanao -0.3637451 -0.503067786 -0.2244224 0.0000002 (significant
 
 # Create the base boxplot
-cf_plot <- ggplot(Gerres_oyena, aes(x = Locality, y = cf, fill = Locality)) +
+cf_plot <- ggplot(Siganus_fuscescens, aes(x = Locality, y = cf, fill = Locality)) +
   geom_boxplot() +
   labs(title = "Fulton's Condition Factor (cf) by Locality", x = "Locality", y = "cf") +
   theme_minimal() +
@@ -388,29 +414,40 @@ print(cf_plot)
 #### Statistical Tests for significant differences of Kn by Locality ----
 
 # Boxplot for Kn to visualize the data
-ggplot(Gerres_oyena, aes(x = Locality, y = Kn, fill = Locality)) +
+ggplot(Siganus_fuscescens, aes(x = Locality, y = Kn, fill = Locality)) +
   geom_boxplot() +
   labs(title = "Le Cren's Relative Condition Factor (Kn) by Locality", x = "Locality", y = "Kn") +
   theme_minimal()
 
 # Check normality using Shapiro-Wilk test
-shapiro.test(Gerres_oyena$Kn)
-# p-value = 0.274 (> 0.05), so the data do not violate the assumption of a normal distribution
+shapiro.test(Siganus_fuscescens$Kn)
+# p-value = 0.3406 (> 0.05), so the data do not violate the assumption of a normal distribution
 
 # Check homogeneity of variances using Levene's Test
-leveneTest(Kn ~ Locality, data = Gerres_oyena)
-# p-value = 0.1327 (>0.05), so assumption of homogeneity of data is not violated
+leveneTest(Kn ~ Locality, data = Siganus_fuscescens)
+# p-value = 0.3395 (>0.05), so assumption of homogeneity of data is not violated
 
 # Use parametric test. Use ANOVA. 
 
 # ANOVA
-Kn_anova_result <- aov(Kn ~ Locality, data = Gerres_oyena)
+Kn_anova_result <- aov(Kn ~ Locality, data = Siganus_fuscescens)
 Kn_anova_summary <- summary(Kn_anova_result)
 print(Kn_anova_summary)
-# p = 0.123. There is not a significant difference in Kn between Localities
+# p = 2.17e-10 (<0.05). There is a significant difference in Kn between Localities. Run Tukey's HSD post-hoc test.
+
+# If significant, perform Tukey's HSD post-hoc test
+if (Kn_anova_summary[[1]][["Pr(>F)"]][1] < 0.05) {
+  Kn_tukey_result <- TukeyHSD(Kn_anova_result)
+  print(Kn_tukey_result)
+}
+# Tukey HSD Results
+# $Locality       diff           lwr        upr     p adj
+# Mindanao_River_Cotabato_Mindanao-Cebu_Strait       0.25427496  0.1773565344  0.3311934 0.0000000 (significant)
+# Surigao_Mindanao-Cebu_Strait                       0.07879766  0.0002105228  0.1573848 0.0492535 (significant)
+# Surigao_Mindanao-Mindanao_River_Cotabato_Mindanao -0.17547730 -0.2475180145 -0.1034366 0.0000009 (significant)
 
 # Create the base boxplot
-Kn_plot <- ggplot(Gerres_oyena, aes(x = Locality, y = Kn, fill = Locality)) +
+Kn_plot <- ggplot(Siganus_fuscescens, aes(x = Locality, y = Kn, fill = Locality)) +
   geom_boxplot() +
   labs(title = "Le Cren's Relative Condition Factor (Kn) by Locality", x = "Locality", y = "Kn") +
   theme_minimal() +
@@ -428,9 +465,9 @@ philippines_map <- map_data("world2", region = "Philippines")
 # create the map
 ggplot() +
   geom_polygon(data = philippines_map, aes(x = long, y = lat, group = group), fill = "lightgray", color = "black") +
-  geom_point(data = Gerres_oyena, aes(x = lon, y = lat, color = Locality), size = 3) +
-  scale_color_manual(values = c("Gulf_of_Davao_Mindinao" = "#F8766D", "Malcochin_Harbor_Linapacan" = "#00BA38", "Port_San_Vicente_Luzon" = "#619CFF")) +
-  labs(title = "Sampling Locations of Gerres oyena", x = "Longitude", y = "Latitude", color = "Locality") +
+  geom_point(data = Siganus_fuscescens, aes(x = lon, y = lat, color = Locality), size = 3) +
+  scale_color_manual(values = c("Cebu_Strait" = "#F8766D", "Mindanao_River_Cotabato_Mindanao" = "#00BA38", "Surigao_Mindanao" = "#619CFF")) +
+  labs(title = "Sampling Locations of Siganus fuscescens", x = "Longitude", y = "Latitude", color = "Locality") +
   scale_x_continuous(breaks = seq(116, 128, by = 2)) +
   coord_fixed(ratio = 1.3, xlim = c(116, 128), ylim = c(4, 20)) +
   theme_minimal()
