@@ -6,7 +6,7 @@
 
 #### set working directory ------------------------------------------------
 
-# set working directory. working directory is set to the directory that has this file. for John
+# for John. set working directory. working directory is set to the directory that has this file.
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 # Libraries ( Load only libraries if not first time) ----
@@ -155,8 +155,8 @@ avg_Kn
 lmrcf <- lm(formula = Kn ~ xS, data = rcf)
 lmrcf
 summary(lmrcf)
-rKn <- (exp_weight)/((a)*(xS)) # I'm not sure this makes sense
-cf <- ((100)*((y)/(xS)^(3)))
+rKn <- (exp_weight)/((a)*(xS)) 
+cf <- ((100)*((y)/(xS)^(3))) # Fulton's Condition factor
 avg_cf <- mean(cf)
 avg_cf
 summary(Kn)
