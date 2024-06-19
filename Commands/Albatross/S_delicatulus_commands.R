@@ -1,15 +1,15 @@
-#### readme ------------------------------------------------------------------
+#### readme ####
 
 # Created by: Gabriel Salomon
 # Last Updated by: John Whalen
-# Last Updated: 6/8/24
+# Last Updated: 6/18/24
 
-#### set working directory ------------------------------------------------
+#### INITIALIZE ####
 
 # for John. set working directory. working directory is set to the directory that has this file.
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
-# Libraries ( Load only libraries if not first time) ----
+# Libraries ( Load only libraries if not first time) 
 install.packages("pacman")
 install.packages("rlang")
 install.packages("ggpubr")
@@ -175,7 +175,7 @@ Spratelloides_delicatulus$rKn <- Spratelloides_delicatulus$exp_weight / (a * Spr
 Spratelloides_delicatulus$cf <- 100 * (Spratelloides_delicatulus$Mass_g / (Spratelloides_delicatulus$SL_cm ^ 3))
 
 # Relative Condition Factor (Kn) of S. delicatulus. 
-ggplot(rcf, aes(x=xS, y=Kn))+
+ggplot(Spratelloides_delicatulus, aes(x=xS, y=Kn))+
   geom_point(aes(fill=))+
   geom_smooth(method = lm)+
   annotate("text" , label="Average Kn = 0.9734, R2 = 0.1443", x=2.75, y=1.2)+  

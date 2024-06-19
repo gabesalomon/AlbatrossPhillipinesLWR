@@ -1,8 +1,8 @@
-#### readme ------------------------------------------------------------------
+#### readme ####
 
 # Created by: Gabriel Salomon
 # Last Updated by: John Whalen
-# Last Updated: 6/10/24
+# Last Updated: 6/18/24
 
 #### INITIALIZE ####
 
@@ -37,7 +37,7 @@ lapply(packages_used,
        require, 
        character.only = TRUE)
 
-# for Gabe. A. endrachtensis Dataset ----
+# for Gabe. A. endrachtensis Dataset
 Atherinomorus_endrachtensis <- read_excel("AlbatrossPhillipinesLWR/Data/Albatross_LWR_data/Albatross_LWR_data.xlsx",13)
 
 # for John. Uses the relative path from the Commands/Albatross/ directory where this R file is located. 
