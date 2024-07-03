@@ -1,4 +1,4 @@
-#### readme ------------------------------------------------------------------
+#### readme ####
 
 # Created by: Gabriel Salomon
 # Last Updated by: John Whalen
@@ -37,13 +37,18 @@ lapply(packages_used,
        require, 
        character.only = TRUE)
 
+#### IMPORT DATA ####
+
 # for John. Uses the relative path from the Commands/Albatross/ directory where this R file is located. 
 Siganus_fuscescens <- read_excel("../../Data/Albatross_LWR_data/Albatross_LWR_data.xlsx", 1)
 
 # for Gabe. S. fuscescens Dataset ----
 Siganus_fuscescens <- read_excel("AlbatrossPhillipinesLWR/Data/Albatross_LWR_data/Albatross_LWR_data.xlsx",1)
 
-View(Siganus_fuscescens)
+view(Siganus_fuscescens)
+
+#### CALCULATIONS ####
+
 summary(Siganus_fuscescens)
 y <- c(Siganus_fuscescens$Mass_g)
 xS <- c(Siganus_fuscescens$SL_cm)
@@ -54,9 +59,9 @@ sqrt(sum((y-mean(y))^2/(length(y)-1)))/sqrt(length(y))
 sqrt(sum((xS-mean(xS))^2/(length(xS)-1)))/sqrt(length(xS))
 sqrt(sum((xT-mean(xT))^2/(length(xT)-1)))/sqrt(length(xT))
 
-#### add coordinates to sites in the dataframe Siganus fuscescens ----
+#### add coordinates to sites in the dataframe Siganus fuscescens ####
 
-#unique Localities
+# unique Localities
 print(unique(Siganus_fuscescens$Locality))
 
 # Locality Coordinates
