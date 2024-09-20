@@ -213,6 +213,26 @@ ggplot(Spratelloides_delicatulus, aes(x=SL_cm, y=cf, color = Locality))+
   ylab("cf")
 
 
+# Fulton's Condition Factor (cf) of S. delicatulus by locality but without Sacol
+# Filter the dataframe to remove the specified locality
+Spratelloides_delicatulus_wosacol <- Spratelloides_delicatulus %>%
+  filter(Locality != "Sacol_Island_Zamboanga")
+
+# Create the plot using the filtered dataframe
+ggplot(Spratelloides_delicatulus_wosacol, aes(x=SL_cm, y=cf, color = Locality)) +
+  geom_point(aes(fill=Locality)) +
+  geom_smooth(method = lm) +
+  theme(axis.text.x = element_text(hjust = 0.5)) +
+  #ggtitle("Fulton's Condition Factor (cf) of S. delicatulus by Locality") +
+  xlab("Standard Length (cm)") +
+  ylab("Fulton's Condition Factor") +
+  theme(legend.position = "none")
+
+
+
+
+
+
 #Linear regression formula
 logw <- log10(y)
 logl <- log10(xS)
@@ -423,6 +443,19 @@ ggplot() +
   coord_fixed(ratio = 1.3, xlim = c(116, 128), ylim = c(4, 20)) +
   theme_minimal()
 
-
+# create the map w/o Sacol
+ggplot() +
+  geom_polygon(data = philippines_map, aes(x = long, y = lat, group = group), fill = "lightgray", color = "black") +
+  geom_point(data = Spratelloides_delicatulus_wosacol, aes(x = lon, y = lat, color = Locality), size = 3) +
+  scale_color_manual(values = c("Cagayan_de_Jolo" = "#F8766D", "Jamelo_Cove_Luzon" = "#00BA38", "Mansalay_Mindoro" = "#619CFF")) +
+  labs(x = "Longitude", y = "Latitude", color = "Locality") +
+  scale_x_continuous(breaks = seq(116, 128, by = 4)) +
+  coord_fixed(ratio = 1.3, xlim = c(116, 128), ylim = c(4, 20)) +
+  theme_minimal() +
+  theme(
+    panel.grid.major = element_blank(),  # Remove major grid lines
+    panel.grid.minor = element_blank(),  # Remove minor grid lines
+    panel.background = element_rect(fill = "white")  # Ensure the background is white
+  )
 
 
