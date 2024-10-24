@@ -1,0 +1,7 @@
+1. collection method and gear type for Albatross and contemporary sde sgr, sfu, goy
+2. site specific differences in lwr
+3. Add 95% confidence ribbons around 
+4. statistical test (cv test) 
+
+
+Matching is comparison of ethanol effects on contemporary and albatross of a matching length. 
